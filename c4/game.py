@@ -22,6 +22,13 @@ class GameState:
         self.board = self.board.play(col)
         self.history.append(col)
 
+    def record_agent_turn(self, result: "TurnResult") -> None:
+        """Play the agent's move and remember its trace and explanation, so the
+        question-answering layer can read them."""
+        self.apply_move(result.col)
+        self.last_trace = result.trace
+        self.last_explanation = result.explanation
+
 
 @dataclass
 class TurnResult:
