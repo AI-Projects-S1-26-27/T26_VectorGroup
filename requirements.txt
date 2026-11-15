@@ -1,0 +1,8 @@
+numpy
+torch
+fastapi
+uvicorn[standard]
+websockets
+numba
+matplotlib
+pytest
