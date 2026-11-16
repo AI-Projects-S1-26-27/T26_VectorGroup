@@ -146,3 +146,27 @@ def test_agent_uses_rules():
 def test_claim_check_all_correct_small_run():
     total, correct, wrong = run(n=40, seed=1)
     assert sum(total.values()) > 0 and not wrong
+
+
+# ------------------------------------------- with teammates' evaluators
+def test_heuristic_trace_uses_heuristic_for_sacrifice():
+    from c4.eval_heuristic import HeuristicEvaluator
+    from c4.explain.rules import _default_evaluator
+    trace = search(Board.from_moves("4453"), HeuristicEvaluator(), max_depth=2)
+    assert isinstance(_default_evaluator(trace), HeuristicEvaluator)
+    detect_facts(trace)                          # runs the sacrifice rule for real
+
+
+def test_quiet_network_move_uses_saliency(monkeypatch):
+    import pytest
+    pytest.importorskip("torch")
+    from c4.explain import rules
+    from c4.nn.evaluator import NNEvaluator
+    from c4.nn.model import C4Net
+    monkeypatch.setattr(rules, "_network", NNEvaluator(model=C4Net()))   # untrained is fine
+    b = Board.from_moves("44")
+    trace = SearchTrace(board=b, chosen=0, depth=1, nodes=1, time_s=0, evaluator="network",
+                        static_score=0, moves={0: MoveInfo(0, 5, 1, [0])})
+    e = explain_move(trace)
+    assert e.concepts == ["saliency"] and "network" in e.sentence
+    assert e.facts[0].kind == "saliency"

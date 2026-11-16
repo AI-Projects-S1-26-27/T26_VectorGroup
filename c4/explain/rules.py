@@ -149,15 +149,30 @@ def forward_chain(ctx: Context) -> list[Fact]:
     return facts
 
 
+_network = None
+
+
+def network_evaluator():
+    """The default NNEvaluator, loaded once; None if torch or the weights are missing.
+    shortcut: always the default weights (models/nn_latest.pt or $C4_MODEL), not
+    whatever file the agent was given; pass `evaluator=` to detect_facts if they differ."""
+    global _network
+    if _network is None:
+        try:
+            _network = importlib.import_module("c4.nn.evaluator").NNEvaluator()
+        except (ImportError, FileNotFoundError):
+            return None
+    return _network
+
+
 def _default_evaluator(trace: SearchTrace):
-    """The heuristic evaluator, if the trace was scored by it and it exists yet.
-    The sacrifice rule must compare scores from the SAME evaluator."""
-    if trace.evaluator != "heuristic":
-        return None
-    try:
+    """The evaluator that scored the trace, so the sacrifice rule compares scores
+    from the SAME evaluator. None if it is not available."""
+    if trace.evaluator == "heuristic":
         return importlib.import_module("c4.eval_heuristic").HeuristicEvaluator()
-    except ModuleNotFoundError:
-        return None
+    if trace.evaluator == "network":
+        return network_evaluator()
+    return None
 
 
 def move_context(board: Board, move: MoveInfo, static_before: int = 0,

@@ -9,7 +9,9 @@ and carry a priority, so the explanation can report the most important 1-3.
     │   ├── defence  : block
     │   └── danger   : trap
     ├── strategy     : sacrifice
-    └── positional   : centre
+    └── positional   : centre, saliency
+"saliency" is only used by explain.py's network fallback for quiet moves, never by
+a rule, so it has no priority.
 """
 from __future__ import annotations
 
@@ -21,6 +23,7 @@ PARENT = {
     "trap": "danger",
     "sacrifice": "strategy",
     "centre": "positional",
+    "saliency": "positional",
 }
 
 # higher = said first; only the leaf concepts (Fact kinds) need one
