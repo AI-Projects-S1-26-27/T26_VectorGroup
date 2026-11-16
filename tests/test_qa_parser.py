@@ -80,7 +80,14 @@ class ParserTests(unittest.TestCase):
                  ("What was your reasoning?", Intent.WHY, None),
                  ("what is the reason?", Intent.WHY, None),
                  ("what if I play column 3 first?", Intent.WHAT_IF, 3),
-                 ("what if I play column 3 first and then 3 again?", Intent.WHAT_IF, 3)]
+                 ("what if I play column 3 first and then 3 again?", Intent.WHAT_IF, 3),
+                 # from Naman's second review
+                 ("why didn't you play column 5 last turn", Intent.WHY_NOT, 5),
+                 ("why not column 5 last time", Intent.WHY_NOT, 5),
+                 ("why not last column?", Intent.WHY_NOT, 7),
+                 ("why not five?", Intent.WHY_NOT, 5),
+                 ("what if I play five", Intent.WHAT_IF, 5),
+                 ("why not column 5, what's the reason?", Intent.WHY_NOT, 5)]
         for text, intent, column in cases:
             with self.subTest(text=text):
                 q = parse_question(text)
