@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glass Box — explainable Connect-4</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>Glass Box <span>an agent that tells you why</span></h1>
+    <div id="conn" class="conn">connecting…</div>
+  </header>
+
+  <main>
+    <!-- left: controls + board -->
+    <section class="left">
+      <div class="controls">
+        <label>Engine
+          <select id="engine"></select>
+        </label>
+        <label>I play
+          <select id="first">
+            <option value="1">first (red)</option>
+            <option value="0">second (yellow)</option>
+          </select>
+        </label>
+        <label>Think time
+          <select id="time">
+            <option value="0.5">0.5 s</option>
+            <option value="1" selected>1 s</option>
+            <option value="2">2 s</option>
+            <option value="5">5 s</option>
+          </select>
+        </label>
+        <button id="new" class="primary">New game</button>
+        <button id="undo">Undo</button>
+      </div>
+
+      <div id="status" class="status">Press “New game” to start.</div>
+
+      <div class="board-wrap">
+        <div id="drop" class="drop-row"></div>
+        <div id="board" class="board" aria-label="Connect-4 board"></div>
+        <div id="scores" class="score-row" title="Search score of each column, from the agent's point of view"></div>
+        <div class="col-labels"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+      </div>
+
+      <div class="toggles">
+        <span>Show:</span>
+        <label><input type="checkbox" id="t-scores" checked> column scores</label>
+        <label><input type="checkbox" id="t-stats" checked> search stats</label>
+        <label><input type="checkbox" id="t-pv"> expected line</label>
+        <label><input type="checkbox" id="t-cells" checked> highlight reasons</label>
+      </div>
+    </section>
+
+    <!-- right: explanation, stats, questions -->
+    <section class="right">
+      <div class="card">
+        <h2>Why the agent played that</h2>
+        <p id="sentence" class="sentence muted">The agent's explanation appears here after its move.</p>
+        <div id="concepts" class="chips"></div>
+      </div>
+
+      <div class="card" id="stats-card">
+        <h2>Search</h2>
+        <dl id="stats" class="stats"><dt>—</dt><dd></dd></dl>
+        <p id="pv" class="pv hidden"></p>
+      </div>
+
+      <div class="card qa">
+        <h2>Ask the agent</h2>
+        <div class="quick">
+          <button data-q="Why did you play that?">Why?</button>
+          <span class="combo">
+            <button id="q-whynot">Why not column</button>
+            <select id="q-col"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option></select>
+          </span>
+          <button id="q-whatif">What if I play there?</button>
+          <button data-q="Who is winning?">Who's winning?</button>
+        </div>
+        <form id="ask-form" class="ask">
+          <input id="ask" type="text" placeholder="e.g. why not the middle one?" autocomplete="off" maxlength="300">
+          <button type="submit" class="primary">Ask</button>
+        </form>
+        <div id="log" class="log"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
