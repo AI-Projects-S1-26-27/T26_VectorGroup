@@ -14,15 +14,7 @@ from __future__ import annotations
 from c4.trace import (SearchTrace, Fact, is_decided, own_moves_to_win,
                       plies_to_end)
 
-try:                                           # Naman's hierarchy, once it is on main
-    from c4.explain.concepts import rank
-except ImportError:                            # same order, so templates work alone
-    _PRIORITY = {"win": 100, "block": 90, "fork": 80, "trap": 70, "sacrifice": 60,
-                 "threat": 50, "setup": 40, "centre": 10}
-
-    def rank(kinds, top: int = 3) -> list[str]:
-        return sorted({k for k in kinds if k in _PRIORITY}, key=_PRIORITY.get,
-                      reverse=True)[:top]
+from c4.explain.concepts import rank          # Naman's concept priorities
 
 # Display bands for NON-decided scores (heuristic/network units, about +-900 in
 # practice). These are labels for the player, not win probabilities.
@@ -78,13 +70,18 @@ def concepts_of(facts: list[Fact]) -> list[str]:
 
 
 def phrases_for(concepts: list[str], facts: list[Fact], *, chosen: bool = True) -> list[str]:
-    """One phrase per concept, in the order given (highest priority first)."""
+    """One phrase per concept, in the order given (highest priority first).
+    A fact kind with no template yet (a new rule) is skipped, never a crash."""
     out = []
     for kind in concepts:
         fact = next((f for f in facts if f.kind == kind
                      and (kind != "threat" or f.detail == "playable")), None)
-        if fact is not None:
+        if fact is None:
+            continue
+        try:
             out.append(fact_phrase(fact, chosen=chosen))
+        except ValueError:
+            continue
     return out
 
 
