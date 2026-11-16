@@ -60,11 +60,6 @@ def _explain(trace: SearchTrace):
         return score_only_explanation(trace)
 
 
-def _to_agent_view(score: int, board: Board, game) -> int:
-    """A search score is from the view of the player to move at `board`."""
-    return score if board.player_to_move == _agent_player(game) else -score
-
-
 # ---------------------------------------------------------------- the entry
 def answer(question, game, agent=None) -> str:
     board = game.board
@@ -90,7 +85,7 @@ def answer(question, game, agent=None) -> str:
             return "My saved move does not match this position any more, so I can't explain it."
         if q.intent == Intent.WHY:
             return _why(game, trace)
-        return _why_not(q.column - 1, trace)
+        return _why_not(q.column - 1, game, trace)
     except _NoSearch:
         return "I can't search that position right now. Please try again. " + HELP
 
@@ -117,7 +112,7 @@ def _game_over(game) -> str:
         who = "I won" if winner == _agent_player(game) else "you won"
     else:
         who = "it is a draw"
-    return f"The game is over: {who}. Start a new game to ask more questions."
+    return f"The game is over: {who}. Start a new game to ask more questions. " + HELP
 
 
 def _why(game, trace: SearchTrace) -> str:
@@ -127,13 +122,13 @@ def _why(game, trace: SearchTrace) -> str:
     return _explain(trace).sentence
 
 
-def _why_not(col: int, trace: SearchTrace) -> str:
+def _why_not(col: int, game, trace: SearchTrace) -> str:
     shown = col + 1
     if col not in trace.moves:
-        return f"Column {shown} was full when I chose my move, so it was not an option."
-    if col == trace.chosen:
-        return f"Column {shown} is the move I played. " + T.render(
-            T.concepts_of(trace.moves[col].facts), trace.moves[col].facts, trace)
+        return (f"Column {shown} was full when I chose my move, so it was not an option. "
+                + HELP)
+    if col == trace.chosen:                       # same words as "why?" (incl. saliency)
+        return f"Column {shown} is the move I played. " + _why(game, trace)
     mine, other = trace.moves[trace.chosen], trace.moves[col]
     parts = [f"I chose column {trace.chosen + 1} instead of column {shown}."]
     if mine.exact and other.exact:
@@ -157,7 +152,7 @@ def _what_if(col: int, game, agent) -> str:
     if board.player_to_move == _agent_player(game):
         return "Wait for my move first, then ask what you could play. " + HELP
     if col not in board.legal_moves():
-        return f"Column {shown} is full. Choose another column."
+        return f"Column {shown} is full. Choose another column. " + HELP
     after = board.play_unchecked(col)             # a new Board; the game is untouched
     prefix = f"If you play column {shown}, "
     if after.last_mover_won():
@@ -177,16 +172,17 @@ def _who_winning(game, agent) -> str:
     trace = game.last_trace
     if trace is not None and _history_ok(game, trace) \
             and trace.board.play_unchecked(trace.chosen) == board:
-        score, mover, depth = trace.score, trace.board.player_to_move, trace.depth
+        # the saved search starts BEFORE the agent's move, which is now played
+        score, mover, depth, played = trace.score, trace.board.player_to_move, trace.depth, 1
     else:                                          # no usable trace: search this board
         t = _analyse(board, game, agent)
-        score, mover, depth = t.score, board.player_to_move, t.depth
+        score, mover, depth, played = t.score, board.player_to_move, t.depth, 0
     agent_score = score if mover == _agent_player(game) else -score
     if is_decided(score):
-        plies = plies_to_end(score)
-        winner_is_mover = score > 0
-        n = (plies + 1) // 2 if winner_is_mover else plies // 2
-        winner_is_agent = (mover == _agent_player(game)) == winner_is_mover
+        plies = plies_to_end(score) - played       # plies left from the CURRENT position
+        winner_is_agent = agent_score > 0
+        winner_to_move = winner_is_agent == (board.player_to_move == _agent_player(game))
+        n = (plies + 1) // 2 if winner_to_move else plies // 2
         who = "I can" if winner_is_agent else "you can"
         return (f"{who[0].upper() + who[1:]} force a win in {n} move{'s' if n != 1 else ''} "
                 f"against best play (found by search, {T.plies_text(plies)}).")
