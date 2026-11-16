@@ -1,0 +1,53 @@
+{
+  "rounds": [
+    "data/selfplay/round_1",
+    "data/selfplay/round_2"
+  ],
+  "init": "models/round1.pt",
+  "parameters": 156889,
+  "settings": {
+    "epochs": 15,
+    "batch_size": 512,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "seed": 0
+  },
+  "games": 25000,
+  "train_positions": 634915,
+  "history": [
+    {
+      "epoch": 1,
+      "train_mse": 0.4634070755473462,
+      "val_mse": 0.5569977760314941,
+      "val_sign_acc": 0.7866681814193726,
+      "minutes": 1.1448011383331809
+    },
+    {
+      "epoch": 2,
+      "train_mse": 0.43378132454233675,
+      "val_mse": 0.5782763957977295,
+      "val_sign_acc": 0.7808542251586914,
+      "minutes": 2.3107421033331774
+    },
+    {
+      "epoch": 3,
+      "train_mse": 0.416864782182433,
+      "val_mse": 0.575035810470581,
+      "val_sign_acc": 0.7849988341331482,
+      "minutes": 3.5445703916668814
+    },
+    {
+      "epoch": 4,
+      "train_mse": 0.4043865474671942,
+      "val_mse": 0.5677897334098816,
+      "val_sign_acc": 0.7850564122200012,
+      "minutes": 4.920298956666859
+    }
+  ],
+  "test": {
+    "n": 21493,
+    "mse": 0.5860506296157837,
+    "baseline_mse": 0.8818899393081665,
+    "sign_acc": 0.7722099423408508
+  }
+}
