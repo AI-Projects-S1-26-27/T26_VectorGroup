@@ -52,6 +52,7 @@ def build_game(state: str, agent) -> GameState:
     """Make a GameState in the named situation; the agent has answered the human's last
     move whenever the position allows it."""
     game = GameState()
+    game.agent = agent
     if state == "start":
         return game
     moves = STATES[state]

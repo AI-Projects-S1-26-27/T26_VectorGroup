@@ -21,6 +21,7 @@ def test_game_situations_are_what_they_claim():
     agent = Agent(HeuristicEvaluator(), time_limit=0.1)
     start = rb.build_game("start", agent)
     assert start.last_trace is None
+    assert start.agent is agent
     mid = rb.build_game("mid", agent)
     assert mid.last_trace is not None and not mid.board.is_over()
     full = rb.build_game("full_column", agent)
