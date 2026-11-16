@@ -147,7 +147,7 @@ def train(round_dirs, out, epochs: int = 15, batch_size: int = 512, lr: float = 
             opt.zero_grad()
             loss.backward()
             opt.step()
-            total += float(loss) * len(idx)
+            total += loss.item() * len(idx)
             seen += len(idx)
         v = metrics(model, xva, yva, device, train_mean)
         row = {"epoch": epoch, "train_mse": total / max(1, seen), "val_mse": v.get("mse"),
