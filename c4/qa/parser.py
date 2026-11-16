@@ -59,8 +59,10 @@ DIGITS = r"(?<!\w)(-?\d+)(?:st|nd|rd|th)?(?!\w)"
 # so "what if I play column 3 first?" is column 3, not 3 and 1. Digits count anywhere.
 WORD_NEXT_TO_COLUMN = (r"\b(?:col(?:umn)?\.?|c)\s+(" + WORD + r")\b|"
                        r"\b(" + WORD + r")\s+col(?:umn)?\b")
-ALIASES = {"middle": 4, "center": 4, "centre": 4, "leftmost": 1, "rightmost": 7,
-           "last": 7}
+ALIASES = {"middle": 4, "center": 4, "centre": 4, "leftmost": 1, "rightmost": 7}
+# "last" is a column only as "the last", "last column" or "last one", so
+# "why not column 5 last time" stays column 5.
+LAST = r"\bthe\s+last(?:\s+(?:one|column))?\b|\blast\s+(?:one|column)\b"
 
 
 def _column(text: str) -> int:
@@ -75,10 +77,21 @@ def _column(text: str) -> int:
         if re.search(pattern, numeric_text):
             values.append(column)
             numeric_text = re.sub(pattern, " ", numeric_text)
+    if re.search(LAST, numeric_text):
+        values.append(7)
+        numeric_text = re.sub(LAST, " ", numeric_text)
     for match in re.finditer(WORD_NEXT_TO_COLUMN, numeric_text):
         values.append(WORDS[match.group(1) or match.group(2)])
     for match in re.finditer(DIGITS, numeric_text):
         values.append(int(match.group(1)))
+    if not values:
+        # No digit and nothing next to "column": a single number word on its own
+        # ("why not five?") still names the column.
+        words = {WORDS[w] for w in re.findall(r"\b(" + WORD + r")\b", numeric_text)}
+        if len(words) > 1:
+            raise QuestionError("Ask about one column at a time. " + HELP)
+        if words:
+            values.append(words.pop())
     if not values:
         raise QuestionError("Specify a column, for example 'column 5'. " + HELP)
     if any(not valid_column(value) for value in values):
@@ -110,8 +123,12 @@ def parse_question(text: str) -> Question:
     if re.search(r"\bwhy\s+(?:did\s+you\s+(?:play|choose|pick|move)|"
                  r"this\s+move|that\s+move|there)\b|"
                  r"\bwhy\s+did\s+you\s+do\s+(?:that|this|it)\b|"
-                 r"\bexplain\s+(?:your|that|this|the)\s+move\b|"
-                 r"\b(?:your|the)\s+reason(?:ing|s)?\b", text) or text.rstrip(" ?.! ") == "why":
+                 r"\bexplain\s+(?:your|that|this|the)\s+move\b", text) \
+            or text.rstrip(" ?.! ") == "why":
+        matches.append(Intent.WHY)
+    # "what was your reasoning?" is a why question, but only when nothing else
+    # matched: in "why not column 5, what's the reason?" it belongs to the why-not.
+    if not matches and re.search(r"\b(?:your|the)\s+reason(?:ing|s)?\b", text):
         matches.append(Intent.WHY)
     if not matches:
         raise QuestionError("I can only answer a few kinds of questions. " + HELP)
