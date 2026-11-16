@@ -53,12 +53,19 @@ WORDS = {"zero": 0, "one": 1, "two": 2, "three": 3, "four": 4,
          "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
          "ten": 10, "first": 1, "second": 2, "third": 3, "fourth": 4,
          "fifth": 5, "sixth": 6, "seventh": 7}
-NUMBER = r"-?\d+(?:st|nd|rd|th)?|" + "|".join(WORDS)
-ALIASES = {"middle": 4, "center": 4, "centre": 4, "leftmost": 1, "rightmost": 7}
+WORD = "|".join(WORDS)
+DIGITS = r"(?<!\w)(-?\d+)(?:st|nd|rd|th)?(?!\w)"
+# A number WORD only counts next to "column"/"col"/"c" ("column five", "fifth column"),
+# so "what if I play column 3 first?" is column 3, not 3 and 1. Digits count anywhere.
+WORD_NEXT_TO_COLUMN = (r"\b(?:col(?:umn)?\.?|c)\s+(" + WORD + r")\b|"
+                       r"\b(" + WORD + r")\s+col(?:umn)?\b")
+ALIASES = {"middle": 4, "center": 4, "centre": 4, "leftmost": 1, "rightmost": 7,
+           "last": 7}
 
 
 def _column(text: str) -> int:
-    if re.search(r"\d\s*[.,]\s*\d|\-\s+\d", text):
+    if re.search(r"\d\s*[.,]\s*\d|\-\s+\d", text) or \
+            re.search(r"\b(?:" + WORD + r"|\d+)\s+point\s+(?:" + WORD + r"|\d+)\b", text):
         raise QuestionError("Use one whole-number column from 1 to 7. " + HELP)
     values = []
     numeric_text = text
@@ -68,10 +75,10 @@ def _column(text: str) -> int:
         if re.search(pattern, numeric_text):
             values.append(column)
             numeric_text = re.sub(pattern, " ", numeric_text)
-    for match in re.finditer(r"(?<!\w)(" + NUMBER + r")(?!\w)", numeric_text):
-        token = match.group(1)
-        values.append(WORDS[token] if token in WORDS
-                      else int(re.sub(r"(st|nd|rd|th)$", "", token)))
+    for match in re.finditer(WORD_NEXT_TO_COLUMN, numeric_text):
+        values.append(WORDS[match.group(1) or match.group(2)])
+    for match in re.finditer(DIGITS, numeric_text):
+        values.append(int(match.group(1)))
     if not values:
         raise QuestionError("Specify a column, for example 'column 5'. " + HELP)
     if any(not valid_column(value) for value in values):
@@ -103,7 +110,8 @@ def parse_question(text: str) -> Question:
     if re.search(r"\bwhy\s+(?:did\s+you\s+(?:play|choose|pick|move)|"
                  r"this\s+move|that\s+move|there)\b|"
                  r"\bwhy\s+did\s+you\s+do\s+(?:that|this|it)\b|"
-                 r"\bexplain\s+(?:your|that|this|the)\s+move\b", text) or text.rstrip(" ?.! ") == "why":
+                 r"\bexplain\s+(?:your|that|this|the)\s+move\b|"
+                 r"\b(?:your|the)\s+reason(?:ing|s)?\b", text) or text.rstrip(" ?.! ") == "why":
         matches.append(Intent.WHY)
     if not matches:
         raise QuestionError("I can only answer a few kinds of questions. " + HELP)
