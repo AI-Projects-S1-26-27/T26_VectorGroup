@@ -7,6 +7,7 @@ from c4.eval_heuristic import HeuristicEvaluator
 from c4.explain.templates import render, advantage_text
 from c4.game import GameState, TurnResult
 from c4.qa.answers import answer
+from c4.qa.parser import HELP
 from c4.trace import Fact, MoveInfo, SearchTrace, WIN_SCORE
 
 
@@ -143,7 +144,8 @@ def test_why_not_chosen_and_full_column():
     board = Board.from_moves("1111112")                   # column 1 is full, agent to move
     trace = hand_trace(board, 3, {c: 0 for c in board.legal_moves()})
     full = GameState(board=board.play_unchecked(3), human_first=True, last_trace=trace)
-    assert "was full" in answer("why not column 1?", full)
+    text = answer("why not column 1?", full)
+    assert "was full" in text and HELP in text
 
 
 # ------------------------------------------------------------------- what if
@@ -167,7 +169,8 @@ def test_what_if_immediate_human_win_and_wrong_turn():
 
 def test_what_if_full_column():
     game = GameState(board=Board.from_moves("111111"), human_first=True)
-    assert "Column 1 is full" in answer("what if I play column 1?", game)
+    text = answer("what if I play column 1?", game)
+    assert "Column 1 is full" in text and HELP in text      # lists what can be asked
 
 
 def test_search_failure_is_a_friendly_message():
@@ -184,13 +187,29 @@ def test_who_winning_reads_saved_trace():
 
 
 def test_who_winning_decided_perspectives():
+    # the saved trace starts before the agent's move; that move is already played,
+    # so a win 7 plies from the trace's root is 6 plies (3 of my moves) from now
     board = Board.from_moves("4")
     win = hand_trace(board, 3, {c: 0 for c in board.legal_moves()} | {3: WIN_SCORE - 7})
     g = GameState(board=board.play_unchecked(3), human_first=True, last_trace=win)
-    assert answer("who is winning?", g).startswith("I can force a win in 4 moves")
+    text = answer("who is winning?", g)
+    assert text.startswith("I can force a win in 3 moves") and "6 plies" in text
     lose = hand_trace(board, 3, {c: 0 for c in board.legal_moves()} | {3: -(WIN_SCORE - 8)})
     g = GameState(board=board.play_unchecked(3), human_first=True, last_trace=lose)
-    assert answer("who is winning?", g).startswith("You can force a win in 4 moves")
+    text = answer("who is winning?", g)
+    assert text.startswith("You can force a win in 4 moves") and "7 plies" in text
+
+
+def test_who_winning_right_after_a_fork_counts_from_now():
+    # Naman's example: agent is X, moves 2 2 3 3, agent plays 4 and makes two threats.
+    agent = fast_agent()
+    board = Board.from_moves("2233")
+    trace = agent.analyse(board)
+    game = GameState(board=board, history=[1, 1, 2, 2], human_first=False)
+    game.record_agent_turn(TurnResult(col=trace.chosen, trace=trace,
+                                      explanation=score_only_explanation(trace)))
+    text = answer("who is winning?", game)
+    assert text.startswith("I can force a win in 1 move ") and "2 plies" in text
 
 
 def test_who_winning_without_trace_searches_with_human_to_move():
@@ -218,4 +237,12 @@ def test_buttons_and_text_agree_and_bad_input_gets_help():
 def test_finished_game():
     board = Board.from_moves("1122334")                   # X wins on the bottom row
     game = GameState(board=board, human_first=True)
-    assert answer("why?", game).startswith("The game is over: you won")
+    text = answer("why?", game)
+    assert text.startswith("The game is over: you won") and HELP in text
+
+
+def test_unknown_fact_kind_is_skipped_not_a_crash():
+    from c4.explain.templates import phrases_for
+    facts = [Fact("brand_new_rule", col=3, cells=[(0, 3)]), Fact("centre", col=3, cells=[(0, 3)])]
+    assert phrases_for(["brand_new_rule", "centre"], facts) == [
+        "it takes the centre column, which is part of the most lines of four"]
