@@ -7,7 +7,7 @@ checked or changed yourself.
 |-|-|-|-|-|
 |Mani Vardhan|eval/solver.py, eval/stats.py, eval/match.py, eval/solver\_agreement.py, eval/robustness.py, eval/plots.py, eval/user\_study/\*, tests for these|Claude (Anthropic)|Drafted these evaluation scripts and their tests from the proposal's section 4.5 and the repo's interfaces|Verified eval/solver.py against brute-force alpha-beta, checked match symmetry and CI calculations, aligned eval/plots.py with round1.json, and ran pytest (30 passed).|
 |Shridali Singh|||||
-|Rujuta Deshmukh|||||
+|Rujuta Deshmukh|c4/eval_heuristic.py, c4/ordering.py, c4/tt.py, eval/node_counts.py, tests for these, docs/report/rujuta.md, node-count results and plot|OpenAI Codex|Inspected the existing board/search/trace interfaces; drafted the heuristic, table, benchmark, tests, documentation, and experiment summary; checked the existing ordering implementation|Personally ran pytest in the terminal (53 passed before merging; 68 passed and 2 skipped after updating main). Codex ran interface, symmetry, bounds, ordering, table, warm-cache integration, seeded-sample and CSV tests. Experiment measurements and later suite results are recorded in the report/results; these automated checks are not claimed as a separate manual code review.|
 |Naman Jain|c4/explain/facts.py, rules.py, concepts.py, explain.py, eval/claim\_check.py, tests/test\_explain.py|Claude (Anthropic)|Drafted the board facts, rules, concept tree, explain\_move, the claim checker and tests from proposal sections 4.3 and 4.5 and the trace interface|Ran eval/claim\_check.py on 500 positions (1622/1622 claims correct), ran the full pytest suite (140 passed), and checked sample explanations from the heuristic agent|
 |Aditya Kumar Somani|||||
 |Veer Parekh|||||
