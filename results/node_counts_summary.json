@@ -1,0 +1,29 @@
+{
+  "positions": 100,
+  "requested_depths": [
+    8
+  ],
+  "full_depth_positions": 82,
+  "early_decided_positions": 18,
+  "incomplete_positions": 0,
+  "score_mismatch_positions": [],
+  "total_nodes": {
+    "baseline": 5934640,
+    "ordering": 5773011,
+    "tt": 2561761,
+    "tt+ordering": 2526749
+  },
+  "total_time_s": {
+    "baseline": 966.9877998999727,
+    "ordering": 1218.9888354000432,
+    "tt": 368.5538611999509,
+    "tt+ordering": 512.0565900000511
+  },
+  "aggregate_node_reduction": 2.3487255758288614,
+  "median_position_reduction": 2.2132901110697922,
+  "target_reduction": 10,
+  "target_met": false,
+  "seed": 26,
+  "time_limit_s": 120.0,
+  "workers": 3
+}
