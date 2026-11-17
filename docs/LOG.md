@@ -18,3 +18,5 @@ One line per piece of work: date, who, what. Everyone adds their own lines.
 - 2026-11-16 Veer Parekh (with Claude): reviewed Sriyanth's PR #9 by running generate, train and network self-play end to end (approved); reviewed Naman's PR #6 by running the claim checker on 6,500 positions (approved).
 - 2026-11-16 Veer Parekh (with Claude): round 2 self-play with the round 1 network: 5,000 games, 149,181 positions, depth 4, 2 to 8 random opening moves; every game replayed to check legality and labels; data/selfplay/round_2 handed to Sriyanth, who used it for the round 2 network (77.2% winner accuracy vs 75.3%).
 - 2026-11-17 Veer Parekh (with Claude): self-play report draft (docs/report/veer.md) with the dataset handoff confirmation; AI-usage row.
+- 2026-11-17 Naman Jain (with Claude): saved claim-check result (results/claim_check.json: 500 positions, 1622/1622 claims correct, target met; new --out option in eval/claim_check.py), report draft (docs/report/naman.md), explain_move switched to Aditya's templates; reviewed Aditya's PR #10 twice and PR #16.
+- 2026-11-18 Naman Jain (with Claude): updated AI-usage row.
