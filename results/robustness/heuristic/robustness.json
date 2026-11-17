@@ -1,0 +1,27 @@
+{
+  "questions": 120,
+  "sensible": 120,
+  "sensible_rate": 1.0,
+  "target": 0.95,
+  "target_met": true,
+  "under_2s_rate": 1.0,
+  "median_seconds": 0.0,
+  "p95_seconds": 1.005,
+  "max_seconds": 1.016,
+  "by_category": {
+    "why": "6/6",
+    "why_not": "4/4",
+    "what_if": "4/4",
+    "winning": "6/6",
+    "column_spelling": "18/18",
+    "bad_column": "8/8",
+    "typo_format": "13/13",
+    "off_topic": "21/21",
+    "degenerate": "28/28",
+    "multi": "3/3",
+    "no_agent_move_yet": "3/3",
+    "full_column": "3/3",
+    "game_over": "3/3"
+  },
+  "failures": []
+}
