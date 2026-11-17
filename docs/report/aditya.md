@@ -28,8 +28,8 @@ reason it did not have. A fact kind with no template (for example a rule added
 later) is skipped instead of crashing.
 
 Phrases for a move that was *not* played are worded differently ("About column 1:
-it lets you win by playing on top of it"), so a reason against a move is not read
-as a reason for it. Proven results are given in moves, the way the proposal words
+it lets you win by playing on top of it in column 1"), so a reason against a move
+is not read as a reason for it. Proven results are given in moves, the way the proposal words
 them ("column 4 lets me force a win in 3 moves", "after column 1 you can force a
 win in 2 moves"), counted from the position the player is looking at. Other scores
 are given as numbers with a plain label: below 50 "roughly balanced", 50 to 250 a
@@ -45,25 +45,30 @@ what if (`what if I play column 3?`, `what happens if I go in 1?`) and who is
 winning (`who's ahead`, `am I winning?`). Exactly one intent must match; a message
 with two questions gets a short reply asking for one at a time.
 
-Columns can be written as digits (`5`, `col5`, `c5`, `5th`), number words next to
-"column" (`column five`, `fifth column`), or names (`the middle one`, `leftmost`,
-`the last column`). Decimals, several columns, and columns outside 1 to 7 are
-rejected with a reason. The player counts columns 1 to 7 and the code 0 to 6;
-the conversion happens once, in `answers.py`. Two ambiguous forms are redirected
-instead of guessed: "why did you play column 5?" (the agent may have played
-elsewhere) and "what if you play 3?" (the what-if question is about the player's
-own move). Every rejected or off-topic message gets the same help reply, which
-lists the four questions.
+Columns can be written as digits (`5`, `col5`, `c5`, `5th`), number words
+(`column five`, `fifth column`, or a lone number word as in `why not five?`), or
+names (`the middle one`, `leftmost`, `the last column`). A number word that is not
+next to "column" is only used when nothing else names a column, so "what if I play
+column 3 first?" is column 3, and "the middle one" is column 4, not column 1.
+Decimals, several columns, and columns outside 1 to 7 are rejected with a reason.
+The player counts columns 1 to 7 and the code 0 to 6; the conversion happens once,
+in `answers.py`. Two ambiguous forms are redirected instead of guessed: "why did
+you play column 5?" (the agent may have played elsewhere) and "what if you play
+3?" (the what-if question is about the player's own move). Every rejected or
+off-topic message gets the same help reply, which lists the four questions.
 
 ## Answering the four questions
 
 * **Why** returns the explanation already made for the agent's last move, so the
   answer always matches the sentence shown on the board.
 * **Why not column c** reads the saved trace from before the agent's move and
-  compares the chosen column with column c: both results when both are exact, a
-  plain statement when the search only has a bound for one of them, then the rule
-  facts about column c and its expected line. Asking about the column that was
-  played gives the why answer; a column that was full gives a short reply.
+  compares the search results for the chosen column and column c, then gives the
+  rule facts about column c and its expected line. Shridali's search scores every
+  first move with a full window, so both results are always exact; the answer
+  still checks the `exact` flag and says it only has a bound if a different search
+  ever sets it, but that does not happen with the current search. Asking about
+  the column that was played gives the why answer; a column that was full gives a
+  short reply.
 * **What if I play c** plays c on a copy of the board and runs one new search, so
   the real game is never changed. An immediate win or a full board is answered
   directly without searching.
@@ -94,7 +99,7 @@ six moves, with the agent's last move in column 4:
 with 164 sub-cases: every question form and column spelling above, the rejected
 forms, all four answers on hand-built traces (including proven wins and losses
 counted in moves), the unusual situations, and that a what-if search leaves the
-game unchanged. On main (`bb1e546`) the full suite passes: 173 tests.
+game unchanged. On main (`d889af7`) the full suite passes: 174 tests.
 
 ## Robustness check (proposal 4.5)
 
@@ -106,12 +111,14 @@ junk input, several questions at once) in four game situations (mid-game, start,
 full column, game over), and checks that each reply is a short plain answer of the
 expected kind.
 
-Final check on main `bb1e546`, agent at 1 s per move:
+Final check on main `d889af7`, agent at 1 s per move. The full results (every
+question, reply, category and time) are saved in `results/robustness/heuristic/`
+and `results/robustness/network/`, as `robustness.csv` and `robustness.json`.
 
 | Evaluator | Sensible | Under 2 s | Slowest reply | Target |
 |-|-|-|-|-|
-| Heuristic | 120/120 (100%) | 120/120 | 1.01 s | met |
-| Network, round 1 (`models/round1.pt`) | 120/120 (100%) | 120/120 | 1.07 s | met |
+| Heuristic | 120/120 (100%) | 120/120 | 1.02 s | met |
+| Network, round 1 (`models/round1.pt`) | 120/120 (100%) | 120/120 | 1.16 s | met |
 
 Every category was 100% in both runs. Replies that only read the saved trace come
 back almost at once (median 0.00 s); the slowest are the what-if and
@@ -130,8 +137,6 @@ game-over questions, but it also includes real misspellings (below).
   "what's the score", also get the help reply. These count as sensible (the player
   is told what to ask) but are not answered.
 * One question per message, English only.
-* Why-not can only compare two columns when the search has an exact score for both;
-  when alpha-beta only gave a bound for one of them, it says so instead.
 * The score labels (50 and 250) were chosen by hand and are the same for both
   evaluators.
 * In the web app, `web/app.py` does not set `game.agent`, so in a game against the
@@ -150,7 +155,8 @@ game-over questions, but it also includes real misspellings (below).
 From the repo root:
 
     python -m pytest -q tests/test_qa_parser.py tests/test_qa_answers.py
-    python -m eval.robustness
-    python -m eval.robustness --evaluator network --model models/nn_latest.pt
+    python -m eval.robustness --out results/robustness/heuristic
+    python -m eval.robustness --evaluator network --model models/round1.pt --out results/robustness/network
 
-The robustness script writes `results/robustness/robustness.csv` and `.json`.
+Each run writes `robustness.csv` and `robustness.json` to its `--out` folder. For
+the final network, use `--model models/nn_latest.pt`.
