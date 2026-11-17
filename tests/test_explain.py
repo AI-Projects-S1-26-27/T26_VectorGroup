@@ -170,3 +170,13 @@ def test_quiet_network_move_uses_saliency(monkeypatch):
     e = explain_move(trace)
     assert e.concepts == ["saliency"] and "network" in e.sentence
     assert e.facts[0].kind == "saliency"
+
+
+def test_claim_check_saves_summary(tmp_path):
+    import json
+    from eval.claim_check import save_summary
+    total, correct, wrong = run(n=10, seed=2)
+    out = tmp_path / "cc.json"
+    save_summary(out, 10, 2, total, correct, wrong)
+    s = json.loads(out.read_text())
+    assert s["claims"] == sum(total.values()) and s["target_met"] is True

@@ -7,12 +7,15 @@ Target from the proposal: at least 98% of claims correct on 500 positions.
 
     python -m eval.claim_check            # 500 positions
     python -m eval.claim_check -n 50 --seed 1
+    python -m eval.claim_check --out results/claim_check.json   # saved for the report
 """
 from __future__ import annotations
 
 import argparse
+import json
 import random
 from collections import Counter
+from pathlib import Path
 
 from c4.board import Board, H1, has_alignment
 from c4.explain.rules import detect_facts
@@ -91,12 +94,32 @@ def run(n: int = 500, seed: int = 0):
     return total, correct, wrong
 
 
+TARGET = 0.98
+
+
+def save_summary(path, n, seed, total, correct, wrong):
+    t, c = sum(total.values()), sum(correct.values())
+    summary = {
+        "positions": n, "seed": seed, "target_accuracy": TARGET,
+        "claims": t, "correct": c, "accuracy": c / max(t, 1),
+        "target_met": t > 0 and c / t >= TARGET,
+        "by_kind": {k: {"claims": total[k], "correct": correct[k]} for k in CHECKED},
+        "wrong": [{"column": col + 1, "kind": f.kind, "cells": f.cells, "board": render}
+                  for render, col, f in wrong],
+    }
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    Path(path).write_text(json.dumps(summary, indent=2) + "\n")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-n", type=int, default=500)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--out", help="write a JSON summary here, e.g. results/claim_check.json")
     args = ap.parse_args()
     total, correct, wrong = run(args.n, args.seed)
+    if args.out:
+        save_summary(args.out, args.n, args.seed, total, correct, wrong)
     for kind in CHECKED:
         if total[kind]:
             print(f"{kind:8s} {correct[kind]:6d}/{total[kind]:<6d} "

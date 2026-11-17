@@ -1,0 +1,36 @@
+{
+  "positions": 500,
+  "seed": 0,
+  "target_accuracy": 0.98,
+  "claims": 1622,
+  "correct": 1622,
+  "accuracy": 1.0,
+  "target_met": true,
+  "by_kind": {
+    "win": {
+      "claims": 198,
+      "correct": 198
+    },
+    "block": {
+      "claims": 193,
+      "correct": 193
+    },
+    "threat": {
+      "claims": 849,
+      "correct": 849
+    },
+    "fork": {
+      "claims": 30,
+      "correct": 30
+    },
+    "setup": {
+      "claims": 295,
+      "correct": 295
+    },
+    "trap": {
+      "claims": 57,
+      "correct": 57
+    }
+  },
+  "wrong": []
+}
