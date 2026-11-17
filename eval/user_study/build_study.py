@@ -43,24 +43,43 @@ def board_emoji(board: Board) -> str:
 
 
 def build_items(n: int, seed: int, evaluator: Player, time_limit: float,
-                min_ply: int = 8, max_ply: int = 28, require_explanations: bool = True) -> list[dict]:
+                min_ply: int = 8, max_ply: int = 28, require_explanations: bool = True,
+                only_explained: bool = True) -> list[dict]:
+    """n study items. With only_explained (default) a position is kept only if the rule
+    layer produced an explanation that differs from the score-only sentence; otherwise
+    both texts would be identical and the item would say nothing about the explanations.
+    The share of sampled moves that did get a rule-based explanation is stored in each
+    item as `explained_share` and should be quoted in the report."""
     agent = Agent(evaluator.evaluator, time_limit=time_limit, tt=evaluator.tt,
                   order_fn=evaluator.order_fn)
-    items = []
-    for moves in sample_positions(n, seed, min_ply, max_ply):
+    pool = sample_positions(n * 6 if only_explained else n, seed, min_ply, max_ply)
+    items, seen = [], 0
+    for moves in pool:
         game = GameState(board=Board.from_moves(moves), history=[int(c) - 1 for c in moves])
         result = agent.play_turn(game)
         base = score_only_explanation(result.trace)
+        seen += 1
+        differs = result.explanation.sentence != base.sentence
+        if only_explained and not differs:
+            continue
         items.append(dict(
             item=len(items) + 1, moves=moves, ply=game.board.num_moves,
             player_to_move="red" if game.board.num_moves % 2 == 0 else "yellow",
             chosen_col=result.col + 1, board=board_emoji(game.board),
             agent_text=result.explanation.sentence, baseline_text=base.sentence,
-            concepts=";".join(result.explanation.concepts)))
-    if require_explanations and all(i["agent_text"] == i["baseline_text"] for i in items):
+            concepts=";".join(result.explanation.concepts), differs=int(differs)))
+        if len(items) == n:
+            break
+    if require_explanations and not any(i["differs"] for i in items):
         raise SystemExit("The agent's explanations are identical to the score-only baseline: "
                          "the explanation layer (c4/explain/) is not on this branch yet. "
                          "Pull main after Naman and Aditya have merged, then run again.")
+    if len(items) < n:
+        raise SystemExit(f"only {len(items)} of {seen} sampled positions got a rule-based "
+                         f"explanation; try a different --seed or lower --items")
+    share = round(len(items) / seen, 3)
+    for it in items:
+        it["explained_share"] = share
     return items
 
 
@@ -103,15 +122,19 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--items", type=int, default=30)
+    p.add_argument("--include-unexplained", action="store_true",
+                   help="also keep positions where agent text == score-only text (not recommended)")
     p.add_argument("--seed", type=int, default=7)
     p.add_argument("--evaluator", default="heuristic")
     p.add_argument("--model", default=None)
     p.add_argument("--time-limit", type=float, default=1.0)
     p.add_argument("--out", default="results/user_study")
     a = p.parse_args(argv)
-    items = build_items(a.items, a.seed, Player(a.evaluator, a.model), a.time_limit)
+    items = build_items(a.items, a.seed, Player(a.evaluator, a.model), a.time_limit,
+                        only_explained=not a.include_unexplained)
     save(items, a.out)
-    print(f"wrote {len(items)} items to {a.out}/ (sheet_A.md, sheet_B.md, key.json, items.csv)")
+    print(f"wrote {len(items)} items to {a.out}/ (sheet_A.md, sheet_B.md, key.json, items.csv); "
+          f"{100 * items[0]['explained_share']:.0f}% of sampled moves had a rule-based explanation")
 
 
 if __name__ == "__main__":
