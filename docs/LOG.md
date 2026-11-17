@@ -8,5 +8,8 @@ One line per piece of work: date, who, what. Everyone adds their own lines.
 
 - 2026-11-16 Mani: perfect solver for testing (eval/solver.py, checked against brute force), 200-game match harness (eval/match.py), solver-agreement check (eval/solver_agreement.py), robustness check (eval/robustness.py), rating-study builder and analysis (eval/user_study/), plots (eval/plots.py), tests for all of them.
 - 2026-11-16 Naman: board facts (69 lines, playable and threat cells, odd/even rows), explanation rules with forward chaining (win, block, threat, fork, trap, setup, centre, sacrifice), concept hierarchy, explain_move with saliency fallback for quiet network moves, brute-force claim checker (eval/claim_check.py), tests.
+- 2026-11-16 Aditya Kumar Somani (with Claude): sentence templates (c4/explain/templates.py), question parser (c4/qa/parser.py) and answers for the four question types (c4/qa/answers.py) with tests, merged as PR #10 after two rounds of Naman's review; played a game through web/app.py and asked all four questions.
+- 2026-11-17 Aditya Kumar Somani (with Claude): final robustness check on main bb1e546: 120/120 sensible, all under 2 s, with the heuristic (slowest 1.01 s) and the round 1 network (slowest 1.07 s); flagged to Srikar that web/app.py does not set game.agent, so what-if searches use the heuristic in network games.
+- 2026-11-17 Aditya Kumar Somani (with Claude): QA report draft (docs/report/aditya.md); AI-usage row.
 
 - 2026-11-16: verified 30 unit tests pass; attach game.agent in robustness builder.
