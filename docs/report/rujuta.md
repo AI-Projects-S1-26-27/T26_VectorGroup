@@ -99,8 +99,9 @@ The following totals use only the 82 complete depth-8 positions:
 
 The aggregate baseline/combined node ratio was **2.35x**, approximately
 57.4% fewer nodes. The median per-position ratio was **2.21x**.
-The documented **10x target was not met** against this existing alpha-beta,
-centre-first baseline. Most node savings came from the table. Tactical
+The initially documented **10x hook-improvement target was not met** against
+this existing alpha-beta, centre-first baseline. This is not a measurement
+against the proposal's plain-minimax baseline. Most node savings came from the table. Tactical
 ordering alone saved few nodes and added time; the combined configuration
 searched slightly fewer nodes than the table alone but took more time.
 These times are sums of per-search durations under three-worker CPU sharing,
@@ -127,10 +128,175 @@ The table is FIFO at capacity, rather than a bucketed or age/depth replacement
 scheme. The heuristic does not model every long-term parity or strategic
 pattern. Ordering adds tactical checks, whose Python overhead can outweigh
 node savings. The baseline's existing centre-first order limits the potential
-gain from the ordering hook. The original proposal itself was not available
-in this checkout; the experiment follows `docs/EVAL.md` and the supplied team
-schedule. Shridali should confirm the hashing requirement before the final
+gain from the ordering hook. The original proposal was unavailable for the
+initial experiment, which followed `docs/EVAL.md` and the supplied schedule.
+The proposal was supplied on 2026-11-18 and its broader experiment is addressed
+in the fixed-depth sweep below. Shridali's report also documents the exact
+bitboard key as a replacement for Zobrist hashing. The team should confirm
+that this documented design deviation is acceptable before the final
 report claims complete proposal compliance.
+
+## Proposal fixed-depth sweep (2026-11-18)
+
+The original proposal specifies plain minimax, alpha-beta, and alpha-beta with
+ordering/table on 100 fixed positions over depths 4 through 12. This differs
+from the initial hook-only experiment above. The new runner uses the same
+seed-26 sample (and identical move strings), all nine integer depths, and three
+configurations: `minimax`, `alpha-beta`, and `alpha-beta+ordering+tt`.
+
+```powershell
+python -m eval.node_counts --depths 4 5 6 7 8 9 10 11 12 --count 100 --seed 26 --workers 6 --node-limit 20000 --time-limit 10 --out results/node_counts_sweep.csv --summary results/node_counts_sweep_summary.json --plot results/plots/node_counts_sweep.png --progress
+```
+
+Each run searches a single requested depth, without iterative deepening or
+early stopping just because one root move has a proven score. All root moves
+are evaluated with full windows. Nodes count recursive calls below the root;
+the root itself is excluded, matching the production counter convention.
+Minimax exhaustively visits the children of every nonterminal node, with no
+alpha-beta cutoffs and no table. Both other paths use the existing production
+alpha-beta implementation through its internal search helper, without editing
+Shridali's files. All three use centre-first baseline order, the same heuristic,
+and the production full-board/immediate-win prechecks (including immediate-win
+recognition before horizon evaluation). Thus these are comparisons under the
+production tactical-terminal convention, not an entirely naive tree generator.
+Every optimized run has a fresh table; nothing persists across positions or
+depths. Every completed run records all root scores for cross-checking.
+
+Unpruned search on the opening positions grows exponentially. To keep the
+experiment runnable on this workstation, each run is limited to 20,000 nodes
+and 10 seconds, with six position/configuration workers. A limited run is
+recorded as `node_limit` or `time_limit`, has completed depth 0, and publishes
+no score, chosen move, or root scores. Its partial node count is work actually
+performed, **not** its completed-tree count. Such rows are excluded from all
+reduction ratios. These bounds are an operational limitation, not evidence
+that the full proposal experiment has been completed.
+
+The summary includes coverage by algorithm/depth, all-three-complete totals,
+and ratios on matching completed pairs only. The paired subset changes with
+depth and disproportionately includes easier positions. It must not be
+presented as a full-100-position result or compared across depths as a fixed
+cohort. A 10x result on a subset cannot establish the full proposal target.
+The plot shows coverage alongside the subset ratios to make this visible.
+
+The CSV is flushed after each job. Add `--resume` to the same command after
+an interruption; sample, depths and resource limits must match. To raise limits,
+use a separate output path to preserve provenance. `--node-limit 0` disables
+the node cap, but the time limit still applies. Full unbounded-style runs may
+take many hours or days; the runner never extrapolates missing node counts.
+
+### Saved sweep results and remaining coverage
+
+All 2,700 attempts are saved: 1,315 completed, 1,360 stopped at the node cap,
+and 25 stopped at the time cap. Completed root-score vectors agree wherever
+more than one configuration completed for a position/depth.
+
+| Depth | Minimax completed / 100 | Alpha-beta completed / 100 | Optimized completed / 100 |
+|---|---:|---:|---:|
+| 4 | 100 | 100 | 100 |
+| 5 | 100 | 100 | 100 |
+| 6 | 34 | 100 | 100 |
+| 7 | 14 | 75 | 98 |
+| 8 | 8 | 37 | 51 |
+| 9 | 8 | 26 | 36 |
+| 10 | 8 | 16 | 27 |
+| 11 | 8 | 14 | 21 |
+| 12 | 8 | 12 | 14 |
+
+Only depths 4 and 5 provide complete three-way comparisons over the entire
+100-position sample:
+
+| Depth | Minimax nodes | Alpha-beta nodes | Optimized nodes | Minimax / optimized |
+|---|---:|---:|---:|---:|
+| 4 | 161,091 | 54,920 | 52,118 | 3.09x |
+| 5 | 979,765 | 153,863 | 123,896 | 7.91x |
+
+At depths 8 through 12 the eight completed minimax positions are trivial under
+the shared immediate-win precheck (61 nodes in total per depth). Their 1x
+subset ratio is selection bias, not a measurement of general deep-search
+efficiency. Depth-6 and depth-7 subset ratios also do not cover the whole sample.
+Accordingly this bounded sweep alone left the full-100-position depth-8 10x
+proposal target **not fully measured**. The later complete depth-8 study below
+supersedes that verdict for depth 8.
+
+The benchmark implementation and bounded sweep are complete, but the requested
+exhaustive comparison for every position at depths 6 through 12 was incomplete
+under these limits. A subsequent study completes depth 8 below; the remaining
+depths still require a larger budget. Completing that numerical coverage requires a
+larger compute/time budget. For example, use a separate output file with
+`--depths 6 7 8 9 10 11 12 --node-limit 0 --time-limit 86400` to permit up to
+one day per search; that is permission for longer attempts, not a guarantee
+that all trees finish. Keep both artifacts and distinguish their resource
+limits. A time-limited result must never be substituted for a completed tree.
+
+The detailed files are `results/node_counts_sweep.csv`,
+`results/node_counts_sweep_summary.json`, and `results/node_counts_sweep_notes.md`.
+The extended focused suite passes 38 tests. No production search, board,
+evaluator-interface, or teammate experiment files were changed.
+
+![Fixed-depth sweep coverage and paired ratios](../../results/plots/node_counts_sweep.png)
+
+## Completed depth-8 proposal comparison (2026-11-18)
+
+The original 100 positions have now been fully compared at depth 8. All 300
+runs completed with no node cap and a one-hour safety deadline per run; none
+hit the deadline. Every root-move score agrees across all three algorithms.
+
+| Method | Nodes over all 100 positions | Minimax / method |
+|---|---:|---:|
+| Plain minimax | 217,990,090 | 1.00x |
+| Alpha-beta | 4,078,411 | 53.45x |
+| Alpha-beta + ordering + table | 2,119,497 | **102.85x** |
+
+**The proposal's 10x depth-8 node-reduction target is met on this fixed sample.**
+The optimized/minimax comparison covers all 100 positions, not a selected
+completed subset. The additional gain over alpha-beta alone is **1.92x** in
+this fixed-depth protocol. The earlier **2.35x** result used iterative deepening
+and early decided-root stopping, and therefore remains a separate experiment.
+Neither ratio should be substituted for the other.
+
+### Making the exhaustive baseline practical without changing its tree
+
+The Python minimax traversal was too slow at the earlier limits. A small C++
+kernel embedded in `eval/node_counts.py` now performs the same actual
+exhaustive minimax traversal, with no alpha-beta pruning, caching, table,
+memoization, estimated counts, or early root-result stopping. It uses the
+identical bitboard layout, centre-first order, 69-window heuristic weights,
+centre/threat bonuses, score clamp, and shared immediate-win terminal shortcut.
+Every visited node is physically traversed and counted. Both alpha-beta
+configurations still use the production Python search helper unchanged.
+
+The optional kernel compiles with g++/clang++ to a temporary directory; no
+executable or extra source file is committed. This run used MSYS2 g++ 15.2.0
+with `-static -O3 -march=native -std=c++17`. Source SHA-256 and validation
+details are saved in `results/native_minimax_validation.json`. The native
+counter exactly matched **all 288 completed saved Python minimax runs** across
+depths 4-12 on nodes, chosen move, best score, and every root score. These
+include all 100 positions at depths 4 and 5. At depth 8 its root-score vectors
+also match both Python alpha-beta variants for all 100 positions.
+
+The experiment compares **node counts**, not language-independent execution
+speed. Native minimax times must not be used to claim a Python wall-clock
+speedup or slowdown. The common immediate-win shortcut means this is the
+production-compatible minimax baseline, not a naive traversal without tactical
+terminal recognition. The result applies to this sample and protocol; it is
+not a proof of a universal speedup on every Connect-4 position.
+
+```powershell
+python -m eval.node_counts --depths 8 --count 100 --seed 26 --workers 4 --node-limit 0 --time-limit 3600 --native-minimax --out results/node_counts_depth8_complete.csv --summary results/node_counts_depth8_complete_summary.json --plot results/plots/node_counts_depth8_complete.png --progress
+```
+
+Use `--resume` with the same arguments after an interruption. A C++ compiler
+is required only for this optional minimax backend; the production agent
+remains Python. The latest focused suite passes **44 tests**.
+
+Raw results, summary, and protocol notes are saved in
+`results/node_counts_depth8_complete.csv`,
+`results/node_counts_depth8_complete_summary.json`, and
+`results/node_counts_depth8_complete_notes.md`. The older limited sweep is
+preserved unchanged. Full 100-position comparisons at depths 6, 7, and 9-12
+remain limited; meeting the depth-8 target does not establish those results.
+
+![Completed depth-8 node comparison](../../results/plots/node_counts_depth8_complete.png)
 
 Code and test drafting, experiment preparation, and this report draft used
 OpenAI Codex assistance. See Rujuta's entry in `docs/AI_USAGE.md` for the

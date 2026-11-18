@@ -1,0 +1,26 @@
+{
+  "reference_csv": "results/node_counts_sweep.csv",
+  "matched_runs": 288,
+  "compared_fields": [
+    "status",
+    "nodes",
+    "chosen",
+    "score",
+    "root_scores",
+    "completed_depth"
+  ],
+  "requested_depths": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "native_source_sha256": "cc47f735657bc082b7e4d58cf5d6c0ada4978e8e58e04df45ea35dcaf97898c3",
+  "all_matched": true,
+  "compiler": "g++ 15.2.0 (MSYS2), -static -O3 -march=native -std=c++17"
+}
