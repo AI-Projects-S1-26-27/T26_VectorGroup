@@ -6,8 +6,8 @@
   "target_met": true,
   "under_2s_rate": 1.0,
   "median_seconds": 0.0,
-  "p95_seconds": 1.004,
-  "max_seconds": 1.156,
+  "p95_seconds": 1.008,
+  "max_seconds": 1.019,
   "by_category": {
     "why": "6/6",
     "why_not": "4/4",
