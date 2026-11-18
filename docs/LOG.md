@@ -20,3 +20,8 @@ One line per piece of work: date, who, what. Everyone adds their own lines.
 - 2026-11-17 Veer Parekh (with Claude): self-play report draft (docs/report/veer.md) with the dataset handoff confirmation; AI-usage row.
 - 2026-11-17 Naman Jain (with Claude): saved claim-check result (results/claim_check.json: 500 positions, 1622/1622 claims correct, target met; new --out option in eval/claim_check.py), report draft (docs/report/naman.md), explain_move switched to Aditya's templates; reviewed Aditya's PR #10 twice and PR #16.
 - 2026-11-18 Naman Jain (with Claude): updated AI-usage row.
+
+- 2026-11-15 Shridali Singh (with Claude): repo structure, board and bitboard win detection, trace format, evaluator interface, game state and stub agent, with tests; merged as PR #1.
+- 2026-11-15 Shridali Singh (with Claude): negamax with alpha-beta, iterative deepening and the table/ordering hooks (c4/search.py) and the agent (c4/agent.py), with tests.
+- 2026-11-16 Shridali Singh: merged Srikar's PR #7 and updated main.
+- 2026-11-18 Shridali Singh (with Claude): updated requirements.txt (added httpx; 174 tests passed); measured search depth (eval/measure_search.py); ran the 200-game network vs heuristic match (94-10-96, score 0.495, target not met); found and fixed a time-check bug (clock checked every 1024 nodes, network overran 1 s), and saved both match runs in results/match/.
