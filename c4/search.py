@@ -62,7 +62,7 @@ class _Searcher:
 
     def negamax(self, board: Board, depth: int, alpha: int, beta: int, ply: int) -> int:
         self.nodes += 1
-        if self.nodes & 1023 == 0 and time.perf_counter() > self.deadline:
+        if self.nodes & 63 == 0 and time.perf_counter() > self.deadline:
             raise _TimeUp
         self.pv[ply] = []
 

@@ -1,8 +1,8 @@
 numpy
 torch
 fastapi
+httpx
 uvicorn[standard]
 websockets
-numba
 matplotlib
 pytest
