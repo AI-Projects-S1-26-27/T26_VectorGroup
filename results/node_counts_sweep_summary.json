@@ -1,0 +1,369 @@
+{
+  "method": "single fixed depth; all root moves exact; root excluded from nodes",
+  "depths": {
+    "4": {
+      "positions": 100,
+      "all_complete_positions": 100,
+      "all_complete_nodes": {
+        "minimax": 161091,
+        "alpha-beta": 54920,
+        "alpha-beta+ordering+tt": 52118
+      },
+      "complete": {
+        "minimax": 100,
+        "alpha-beta": 100,
+        "alpha-beta+ordering+tt": 100
+      },
+      "node_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "time_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 100,
+          "baseline_nodes": 161091,
+          "optimized_nodes": 52118,
+          "reduction": 3.0908899036801105
+        },
+        "alpha-beta": {
+          "positions": 100,
+          "baseline_nodes": 54920,
+          "optimized_nodes": 52118,
+          "reduction": 1.0537626156030546
+        }
+      }
+    },
+    "5": {
+      "positions": 100,
+      "all_complete_positions": 100,
+      "all_complete_nodes": {
+        "minimax": 979765,
+        "alpha-beta": 153863,
+        "alpha-beta+ordering+tt": 123896
+      },
+      "complete": {
+        "minimax": 100,
+        "alpha-beta": 100,
+        "alpha-beta+ordering+tt": 100
+      },
+      "node_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "time_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 100,
+          "baseline_nodes": 979765,
+          "optimized_nodes": 123896,
+          "reduction": 7.9079631303674045
+        },
+        "alpha-beta": {
+          "positions": 100,
+          "baseline_nodes": 153863,
+          "optimized_nodes": 123896,
+          "reduction": 1.2418722154064699
+        }
+      }
+    },
+    "6": {
+      "positions": 100,
+      "all_complete_positions": 34,
+      "all_complete_nodes": {
+        "minimax": 263919,
+        "alpha-beta": 29326,
+        "alpha-beta+ordering+tt": 23644
+      },
+      "complete": {
+        "minimax": 34,
+        "alpha-beta": 100,
+        "alpha-beta+ordering+tt": 100
+      },
+      "node_limited": {
+        "minimax": 59,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "time_limited": {
+        "minimax": 7,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 34,
+          "baseline_nodes": 263919,
+          "optimized_nodes": 23644,
+          "reduction": 11.162197597699205
+        },
+        "alpha-beta": {
+          "positions": 100,
+          "baseline_nodes": 509659,
+          "optimized_nodes": 363539,
+          "reduction": 1.401937618797433
+        }
+      }
+    },
+    "7": {
+      "positions": 100,
+      "all_complete_positions": 14,
+      "all_complete_nodes": {
+        "minimax": 70306,
+        "alpha-beta": 6772,
+        "alpha-beta+ordering+tt": 4892
+      },
+      "complete": {
+        "minimax": 14,
+        "alpha-beta": 75,
+        "alpha-beta+ordering+tt": 98
+      },
+      "node_limited": {
+        "minimax": 86,
+        "alpha-beta": 25,
+        "alpha-beta+ordering+tt": 2
+      },
+      "time_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 14,
+          "baseline_nodes": 70306,
+          "optimized_nodes": 4892,
+          "reduction": 14.371627146361407
+        },
+        "alpha-beta": {
+          "positions": 75,
+          "baseline_nodes": 642562,
+          "optimized_nodes": 397419,
+          "reduction": 1.6168376449037414
+        }
+      }
+    },
+    "8": {
+      "positions": 100,
+      "all_complete_positions": 8,
+      "all_complete_nodes": {
+        "minimax": 61,
+        "alpha-beta": 61,
+        "alpha-beta+ordering+tt": 61
+      },
+      "complete": {
+        "minimax": 8,
+        "alpha-beta": 37,
+        "alpha-beta+ordering+tt": 51
+      },
+      "node_limited": {
+        "minimax": 92,
+        "alpha-beta": 63,
+        "alpha-beta+ordering+tt": 49
+      },
+      "time_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 8,
+          "baseline_nodes": 61,
+          "optimized_nodes": 61,
+          "reduction": 1.0
+        },
+        "alpha-beta": {
+          "positions": 37,
+          "baseline_nodes": 222401,
+          "optimized_nodes": 136468,
+          "reduction": 1.629693407978427
+        }
+      }
+    },
+    "9": {
+      "positions": 100,
+      "all_complete_positions": 8,
+      "all_complete_nodes": {
+        "minimax": 61,
+        "alpha-beta": 61,
+        "alpha-beta+ordering+tt": 61
+      },
+      "complete": {
+        "minimax": 8,
+        "alpha-beta": 26,
+        "alpha-beta+ordering+tt": 36
+      },
+      "node_limited": {
+        "minimax": 90,
+        "alpha-beta": 73,
+        "alpha-beta+ordering+tt": 62
+      },
+      "time_limited": {
+        "minimax": 2,
+        "alpha-beta": 1,
+        "alpha-beta+ordering+tt": 2
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 8,
+          "baseline_nodes": 61,
+          "optimized_nodes": 61,
+          "reduction": 1.0
+        },
+        "alpha-beta": {
+          "positions": 26,
+          "baseline_nodes": 159881,
+          "optimized_nodes": 88991,
+          "reduction": 1.7965974087267251
+        }
+      }
+    },
+    "10": {
+      "positions": 100,
+      "all_complete_positions": 8,
+      "all_complete_nodes": {
+        "minimax": 61,
+        "alpha-beta": 61,
+        "alpha-beta+ordering+tt": 61
+      },
+      "complete": {
+        "minimax": 8,
+        "alpha-beta": 16,
+        "alpha-beta+ordering+tt": 27
+      },
+      "node_limited": {
+        "minimax": 92,
+        "alpha-beta": 84,
+        "alpha-beta+ordering+tt": 73
+      },
+      "time_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 8,
+          "baseline_nodes": 61,
+          "optimized_nodes": 61,
+          "reduction": 1.0
+        },
+        "alpha-beta": {
+          "positions": 16,
+          "baseline_nodes": 61206,
+          "optimized_nodes": 32099,
+          "reduction": 1.9067883734695785
+        }
+      }
+    },
+    "11": {
+      "positions": 100,
+      "all_complete_positions": 8,
+      "all_complete_nodes": {
+        "minimax": 61,
+        "alpha-beta": 61,
+        "alpha-beta+ordering+tt": 61
+      },
+      "complete": {
+        "minimax": 8,
+        "alpha-beta": 14,
+        "alpha-beta+ordering+tt": 21
+      },
+      "node_limited": {
+        "minimax": 92,
+        "alpha-beta": 86,
+        "alpha-beta+ordering+tt": 79
+      },
+      "time_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 8,
+          "baseline_nodes": 61,
+          "optimized_nodes": 61,
+          "reduction": 1.0
+        },
+        "alpha-beta": {
+          "positions": 14,
+          "baseline_nodes": 49272,
+          "optimized_nodes": 25713,
+          "reduction": 1.9162291447905728
+        }
+      }
+    },
+    "12": {
+      "positions": 100,
+      "all_complete_positions": 8,
+      "all_complete_nodes": {
+        "minimax": 61,
+        "alpha-beta": 61,
+        "alpha-beta+ordering+tt": 61
+      },
+      "complete": {
+        "minimax": 8,
+        "alpha-beta": 12,
+        "alpha-beta+ordering+tt": 14
+      },
+      "node_limited": {
+        "minimax": 86,
+        "alpha-beta": 88,
+        "alpha-beta+ordering+tt": 79
+      },
+      "time_limited": {
+        "minimax": 6,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 7
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 8,
+          "baseline_nodes": 61,
+          "optimized_nodes": 61,
+          "reduction": 1.0
+        },
+        "alpha-beta": {
+          "positions": 12,
+          "baseline_nodes": 43974,
+          "optimized_nodes": 18805,
+          "reduction": 2.338420632810423
+        }
+      }
+    }
+  },
+  "proposal_depth8_target": {
+    "depth": 8,
+    "required_positions": 100,
+    "required_reduction": 10,
+    "status": "not_fully_measured",
+    "reference": "minimax vs optimized"
+  },
+  "fully_completed": false,
+  "scores_consistent": true,
+  "seed": 26,
+  "workers": 6,
+  "node_limit": 20000,
+  "time_limit_s": 10.0
+}
