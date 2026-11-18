@@ -1,0 +1,35 @@
+{
+  "games": 200,
+  "a_wins": 94,
+  "b_wins": 95,
+  "draws": 11,
+  "a_score": 0.4975,
+  "a_score_wilson95": [
+    0.42890757894506526,
+    0.5661866510845265
+  ],
+  "a_score_bootstrap95": [
+    0.4325,
+    0.56
+  ],
+  "a_win_rate_excluding_draws": 0.4973544973544973,
+  "a_win_rate_excluding_draws_wilson95": [
+    0.426837257396125,
+    0.5679771394974913
+  ],
+  "target": 0.55,
+  "target_met": false,
+  "target_clearly_met": false,
+  "config": {
+    "a": "network",
+    "a_model": "models/nn_latest.pt",
+    "b": "heuristic",
+    "b_model": null,
+    "games": 200,
+    "time_limit": 1.0,
+    "depth": 42,
+    "workers": 3,
+    "seed": 0
+  },
+  "minutes": 19.32
+}
