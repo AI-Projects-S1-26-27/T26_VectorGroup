@@ -15,10 +15,15 @@ Key points
       tt        object with probe(key) -> (depth, value, flag, best_move) | None
                 and store(key, depth, value, flag, best_move); flags EXACT/LOWER/UPPER
       order_fn  order_fn(board, moves, tt_move) -> list of the same moves, best first
+  * Optional acceleration: backend="native" for the validated heuristic engine,
+    or C4_SEARCH_BACKEND=auto to use it when supported and fall back to Python.
+    Python remains the default. Compile/load once during application setup;
+    native timing and implementation qualifications are documented separately.
 """
 from __future__ import annotations
 
 import time
+import os
 
 from c4.board import Board, CENTER_FIRST, SIZE
 from c4.evaluator import Evaluator
@@ -127,7 +132,26 @@ class _Searcher:
 
 
 def search(board: Board, evaluator: Evaluator, time_limit: float = 1.0,
-           max_depth: int = 42, tt=None, order_fn=None) -> SearchTrace:
+           max_depth: int = 42, tt=None, order_fn=None, backend=None) -> SearchTrace:
+    selected = backend or os.environ.get("C4_SEARCH_BACKEND", "python")
+    if selected not in ("python", "native", "auto"):
+        raise ValueError("backend must be python, native or auto")
+    if selected != "python":
+        from c4.eval_heuristic import HeuristicEvaluator
+        from c4.ordering import move_ordering
+        from c4.tt import TranspositionTable
+        compatible = (type(evaluator) is HeuristicEvaluator
+                      and (tt is None or type(tt) is TranspositionTable)
+                      and (order_fn is None or order_fn is move_ordering))
+        if compatible:
+            from c4.native_search import native_search, NativeUnavailable
+            try:
+                return native_search(board, evaluator, time_limit, max_depth, tt, order_fn)
+            except NativeUnavailable:
+                if selected == "native":
+                    raise
+        elif backend == "native":
+            raise ValueError("Custom evaluator/table/ordering requires Python search")
     if board.is_over():
         raise ValueError("cannot search a finished game")
 

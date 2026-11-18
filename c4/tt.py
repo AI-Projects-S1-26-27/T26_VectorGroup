@@ -1,5 +1,6 @@
 ﻿"""Depth-preferred transposition table for the search hooks."""
 from c4.search import EXACT, LOWER, UPPER
+from threading import RLock
 
 
 class TranspositionTable:
@@ -15,8 +16,12 @@ class TranspositionTable:
         self.max_entries = max_entries
         self._entries = {}
         self._probes = self._hits = self._stores = 0
+        self._native = None
+        self._native_lock = RLock()
 
     def probe(self, key):
+        if self._native is not None:
+            return self._native.probe(key)
         self._probes += 1
         entry = self._entries.get(key)
         if entry is not None:
@@ -26,6 +31,9 @@ class TranspositionTable:
     def store(self, key, depth, value, flag, best_move):
         if flag not in (EXACT, LOWER, UPPER):
             raise ValueError("unknown transposition-table flag")
+        if self._native is not None:
+            self._native.store(key, depth, value, flag, best_move)
+            return
         old = self._entries.get(key)
         if old is not None:
             if depth < old[0]:
@@ -41,11 +49,30 @@ class TranspositionTable:
         """Remove entries and reset counters for a fresh experiment."""
         self._entries.clear()
         self._probes = self._hits = self._stores = 0
+        if self._native is not None:
+            self._native.clear()
 
     def stats(self):
         """Return a snapshot; stores counts accepted writes."""
+        if self._native is not None:
+            return self._native.stats()
         return {"entries": len(self._entries), "probes": self._probes,
                 "hits": self._hits, "stores": self._stores}
 
     def __len__(self):
+        if self._native is not None:
+            return self._native.stats()["entries"]
         return len(self._entries)
+
+    def native_context(self):
+        """Lazily share the same public table with the optional accelerator."""
+        with self._native_lock:
+            if self._native is None:
+                from c4.native_search import NativeTable
+                context = NativeTable(self.max_entries)
+                for key, entry in self._entries.items():
+                    context.store(key, *entry)
+                context.lib.c4_table_counters(context.handle, self._probes, self._hits, self._stores)
+                self._native = context
+                self._entries.clear()
+            return self._native
