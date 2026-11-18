@@ -1,0 +1,15 @@
+{
+  "native_source_sha256": "f39c9838161ec63b4788bf7e038687eb36ae0da2c84fb76cf6c11ca5e6bb6e3d",
+  "evaluator_positions_matched": 4198,
+  "sample_positions": 100,
+  "depth8_root_vectors_matched": 82,
+  "early_decided_python_traces_matched": 18,
+  "all_root_scores_matched": true,
+  "all_pv_steps_legal": true,
+  "reference": "results/node_counts_depth8_complete.csv; Python search for early decided traces",
+  "tests": {
+    "native_core_passed": 44,
+    "auto_integration_passed": 132,
+    "auto_integration_skipped": 2
+  }
+}
