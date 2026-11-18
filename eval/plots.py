@@ -4,8 +4,7 @@ Reads whatever exists under results/ and skips what does not, so you can run it 
 time:   python -m eval.plots            (writes PNGs to results/plots/)
 
   training.png          training and validation error per epoch   <- results/training/round*.json
-  node_counts.png       nodes searched per configuration          <- results/node_counts.csv
-                        (create it with:  python -m eval.node_counts --depth 6 > results/node_counts.csv)
+  (node_counts.png is made by Rujuta's eval/node_counts.py and is NOT touched here)
   match.png             win/draw/loss of the network vs heuristic <- results/match/*.json
   solver_agreement.png  accuracy vs solver, by game stage         <- results/solver_agreement/agreement.json
   explanation_ratings.png  mean rating, agent vs score-only       <- results/user_study/analysis.json
@@ -130,7 +129,7 @@ def plot_ratings(out: Path) -> list[Path]:
 def main(argv=None):
     out = RESULTS / "plots"
     made = []
-    for fn in (plot_training, plot_node_counts, plot_match, plot_agreement, plot_ratings):
+    for fn in (plot_training, plot_match, plot_agreement, plot_ratings):   # node_counts.png is Rujuta's
         made += fn(out)
     print("\n".join(str(p) for p in made) or "nothing to plot yet (no result files found)")
 

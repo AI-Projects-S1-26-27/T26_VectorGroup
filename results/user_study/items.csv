@@ -1,0 +1,211 @@
+item,moves,ply,player_to_move,chosen_col,board,agent_text,baseline_text,concepts,differs,explained_share
+1,246155511145222514,18,red,4,"⚪⚪⚪⚪⚪⚪⚪
+🔴⚪⚪⚪🟡⚪⚪
+🟡🔴⚪⚪🟡⚪⚪
+🔴🟡⚪🟡🔴⚪⚪
+🟡🔴⚪🔴🟡⚪⚪
+🟡🔴⚪🟡🔴🔴⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 6 plies ahead, my score went from -787 to -612.",I played column 4. After looking 6 plies ahead its score is -612.,centre,1,1.0
+2,572335332,9,yellow,7,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪🟡⚪⚪⚪⚪
+⚪⚪🔴⚪⚪⚪⚪
+⚪🔴🔴⚪🟡⚪⚪
+⚪🔴🟡⚪🔴⚪🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 7. There is no direct tactic here, but my network rates the position after it at +0.33 for me, and my stone in column 3, row 1 helps me the most. Looking 5 plies ahead, my score went from -598 to 174.",I played column 7. After looking 5 plies ahead its score is 174.,saliency,1,1.0
+3,643544345654455331,18,red,5,"⚪⚪⚪🔴⚪⚪⚪
+⚪⚪⚪🟡🔴⚪⚪
+⚪⚪🔴🟡🟡⚪⚪
+⚪⚪🟡🟡🔴⚪⚪
+⚪⚪🔴🔴🔴🟡⚪
+🟡⚪🔴🟡🟡🔴⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 5. There is no direct tactic here, but my network rates the position after it at -0.33 for me, and your stone in column 4, row 3 is a problem for me the most. Looking 9 plies ahead, my score went from -875 to 53.",I played column 5. After looking 9 plies ahead its score is 53.,saliency,1,1.0
+4,3466634464,10,red,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪🟡⚪🔴⚪
+⚪⚪⚪🟡⚪🔴⚪
+⚪⚪🟡🔴⚪🟡⚪
+⚪⚪🔴🟡⚪🔴⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 5 plies ahead, my score went from -462 to 653.",I played column 4. After looking 5 plies ahead its score is 653.,centre,1,1.0
+5,1432423223443263466,19,yellow,6,"⚪⚪⚪⚪⚪⚪⚪
+⚪🟡🟡🔴⚪⚪⚪
+⚪🔴🔴🟡⚪⚪⚪
+⚪🟡🟡🔴⚪🔴⚪
+⚪🟡🔴🔴⚪🟡⚪
+🔴🟡🔴🟡⚪🔴⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 6. There is no direct tactic here, but my network rates the position after it at -0.97 for me, and your stone in column 4, row 3 is a problem for me the most. Looking 7 plies ahead, my score went from -936 to -938.",I played column 6. After looking 7 plies ahead its score is -938.,saliency,1,1.0
+6,22126423445575547447,20,red,2,"⚪⚪⚪🔴⚪⚪⚪
+⚪⚪⚪🟡⚪⚪⚪
+⚪🔴⚪🟡🔴⚪⚪
+⚪🟡⚪🟡🟡⚪🟡
+⚪🟡⚪🔴🟡⚪🔴
+🔴🔴🟡🟡🔴🔴🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 2. There is no direct tactic here, but my network rates the position after it at -0.58 for me, and your stone in column 4, row 1 is a problem for me the most. Looking 7 plies ahead, my score went from -839 to -162.",I played column 2. After looking 7 plies ahead its score is -162.,saliency,1,1.0
+7,341144411474776666677633373,27,yellow,5,"⚪⚪⚪🟡⚪🟡🟡
+⚪⚪🔴🟡⚪🔴🔴
+🔴⚪🔴🔴⚪🟡🟡
+🟡⚪🟡🟡⚪🔴🟡
+🟡⚪🔴🔴⚪🟡🔴
+🔴⚪🔴🟡⚪🔴🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 5 because it looks worse at first sight, but the search score is higher. I can force a win in 6 moves.",I played column 5. I can force a win in 6 moves.,sacrifice,1,1.0
+8,625755231556366533,18,red,4,"⚪⚪⚪⚪🟡⚪⚪
+⚪⚪⚪⚪🔴⚪⚪
+⚪⚪🟡⚪🟡🔴⚪
+⚪⚪🔴⚪🟡🟡⚪
+⚪🔴🔴⚪🔴🟡⚪
+🔴🟡🟡⚪🔴🔴🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it looks worse at first sight, but the search score is higher and it takes the centre column, which is part of the most lines of four. Looking 6 plies ahead, my score went from 732 to 861.",I played column 4. After looking 6 plies ahead its score is 861.,sacrifice;centre,1,1.0
+9,4763664432555,13,yellow,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪🟡🔴🟡⚪
+⚪⚪🔴🔴🟡🔴⚪
+⚪🟡🟡🔴🔴🔴🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 5 plies ahead, my score went from 399 to 139.",I played column 4. After looking 5 plies ahead its score is 139.,centre,1,1.0
+10,575445712466,12,red,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪🟡🟡⚪⚪
+⚪⚪⚪🔴🔴🟡🔴
+🟡🔴⚪🟡🔴🔴🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it blocks your four-in-a-row and it takes the centre column, which is part of the most lines of four. Looking 7 plies ahead, my score went from 420 to -346.",I played column 4. After looking 7 plies ahead its score is -346.,block;centre,1,1.0
+11,727735555362253332774,21,yellow,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪🔴⚪🟡⚪🟡
+⚪🟡🟡⚪🔴⚪🔴
+⚪🔴🔴⚪🟡⚪🟡
+⚪🟡🟡⚪🔴⚪🔴
+⚪🟡🔴🔴🟡🔴🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it sets up a threat in column 1, row 2 for later and it takes the centre column, which is part of the most lines of four. Looking 7 plies ahead, my score went from -906 to -409.",I played column 4. After looking 7 plies ahead its score is -409.,setup;centre,1,1.0
+12,5177244442225,13,yellow,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪🟡⚪🔴⚪⚪⚪
+⚪🔴⚪🟡⚪⚪⚪
+⚪🟡⚪🔴🔴⚪🟡
+🟡🔴⚪🟡🔴⚪🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 5 plies ahead, my score went from 57 to -28.",I played column 4. After looking 5 plies ahead its score is -28.,centre,1,1.0
+13,223145444,9,yellow,2,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪🔴⚪⚪⚪
+⚪⚪⚪🟡⚪⚪⚪
+⚪🟡⚪🔴⚪⚪⚪
+🟡🔴🔴🔴🟡⚪⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 2. There is no direct tactic here, but my network rates the position after it at +0.72 for me, and my stone in column 4, row 3 helps me the most. Looking 4 plies ahead, my score went from 818 to 232.",I played column 2. After looking 4 plies ahead its score is 232.,saliency,1,1.0
+14,126347663221443243277,21,yellow,3,"⚪⚪⚪⚪⚪⚪⚪
+⚪🔴⚪⚪⚪⚪⚪
+⚪🟡🟡🔴⚪⚪⚪
+⚪🔴🔴🟡⚪🟡🔴
+🟡🟡🔴🔴⚪🔴🟡
+🔴🟡🟡🔴⚪🔴🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 3 because it looks worse at first sight, but the search score is higher. Looking 5 plies ahead, my score went from -390 to 73.",I played column 3. After looking 5 plies ahead its score is 73.,sacrifice,1,1.0
+15,6313343517,10,red,2,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪🔴⚪⚪⚪⚪
+⚪⚪🔴⚪⚪⚪⚪
+🔴⚪🟡⚪⚪⚪⚪
+🔴⚪🟡🟡🟡🔴🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 2 because it blocks your four-in-a-row. Looking 8 plies ahead, my score went from 286 to -615.",I played column 2. After looking 8 plies ahead its score is -615.,block,1,1.0
+16,113377422532335,15,yellow,5,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪🟡⚪⚪⚪⚪
+⚪⚪🔴⚪⚪⚪⚪
+⚪🟡🔴⚪⚪⚪⚪
+🟡🔴🟡⚪🔴⚪🟡
+🔴🟡🔴🔴🟡⚪🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 5. There is no direct tactic here, but my network rates the position after it at -0.96 for me, and your stone in column 3, row 3 is a problem for me the most. Looking 5 plies ahead, my score went from -995 to -961.",I played column 5. After looking 5 plies ahead its score is -961.,saliency,1,1.0
+17,1762412373364222,16,red,5,"⚪⚪⚪⚪⚪⚪⚪
+⚪🟡⚪⚪⚪⚪⚪
+⚪🔴⚪⚪⚪⚪⚪
+⚪🟡🔴⚪⚪⚪⚪
+🟡🔴🟡🔴⚪🟡🔴
+🔴🟡🟡🔴⚪🔴🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣",I played column 5 because it completes four in a row and wins the game. I can force a win in 1 move.,I played column 5. I can force a win in 1 move.,win,1,1.0
+18,562122343,9,yellow,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪🟡⚪⚪⚪⚪⚪
+⚪🔴🔴⚪⚪⚪⚪
+🟡🔴🔴🟡🔴🟡⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 6 plies ahead, my score went from -830 to -360.",I played column 4. After looking 6 plies ahead its score is -360.,centre,1,1.0
+19,34563341564475,14,red,5,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪🟡⚪⚪⚪
+⚪⚪🟡🔴🟡⚪⚪
+⚪⚪🔴🔴🔴🟡⚪
+🟡⚪🔴🟡🔴🟡🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 5 because it looks worse at first sight, but the search score is higher, it threatens to win in column 2 next move and it sets up a threat in column 6, row 5 for later. I can force a win in 2 moves.",I played column 5. I can force a win in 2 moves.,sacrifice;threat;setup,1,1.0
+20,132332115574446,15,yellow,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+🟡⚪🔴🟡⚪⚪⚪
+🔴🟡🟡🔴🟡⚪⚪
+🔴🔴🟡🟡🔴🔴🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 5 plies ahead, my score went from 483 to 826.",I played column 4. After looking 5 plies ahead its score is 826.,centre,1,1.0
+21,177643445555,12,red,3,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪🟡⚪⚪
+⚪⚪⚪🟡🔴⚪⚪
+⚪⚪⚪🔴🟡⚪🔴
+🔴⚪🟡🔴🔴🟡🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 3. There is no direct tactic here, but my network rates the position after it at -0.06 for me, and your stone in column 5, row 4 is a problem for me the most. Looking 5 plies ahead, my score went from -119 to -99.",I played column 3. After looking 5 plies ahead its score is -99.,saliency,1,1.0
+22,76576641,8,red,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪🟡⚪
+⚪⚪⚪⚪⚪🔴🟡
+🟡⚪⚪🔴🔴🟡🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 5 plies ahead, my score went from -103 to 955.",I played column 4. After looking 5 plies ahead its score is 955.,centre,1,1.0
+23,263133154,9,yellow,2,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪🟡⚪⚪⚪⚪
+🔴⚪🔴⚪⚪⚪⚪
+🟡🔴🔴🔴🟡🟡⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 2 because it sets up a threat in column 4, row 4 for later. Looking 5 plies ahead, my score went from -398 to 341.",I played column 2. After looking 5 plies ahead its score is 341.,setup,1,1.0
+24,7326566537,10,red,2,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪🔴⚪
+⚪⚪🔴⚪🟡🟡🟡
+⚪🔴🟡⚪🔴🟡🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 2. There is no direct tactic here, but my network rates the position after it at -0.81 for me, and my stone in column 2, row 1 is a problem for me the most. Looking 4 plies ahead, my score went from -147 to -778.",I played column 2. After looking 4 plies ahead its score is -778.,saliency,1,1.0
+25,65344344544655253,17,yellow,3,"⚪⚪⚪🔴⚪⚪⚪
+⚪⚪⚪🟡🟡⚪⚪
+⚪⚪⚪🟡🟡⚪⚪
+⚪⚪🔴🔴🔴⚪⚪
+⚪⚪🟡🔴🔴🟡⚪
+⚪🔴🔴🟡🟡🔴⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 3 because it blocks your four-in-a-row and it sets up a threat in column 2, row 4 for later. I am losing by force, and this move delays it the longest.","I played column 3. I am losing by force, and this move delays it the longest.",block;setup,1,1.0
+26,5126227414,10,red,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪🟡⚪⚪⚪⚪⚪
+🔴🔴⚪🟡⚪⚪⚪
+🟡🔴⚪🟡🔴🟡🔴
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 5 plies ahead, my score went from -361 to -40.",I played column 4. After looking 5 plies ahead its score is -40.,centre,1,1.0
+27,444144533637231,15,yellow,6,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪🟡⚪⚪⚪
+⚪⚪🟡🔴⚪⚪⚪
+⚪⚪🔴🔴⚪⚪⚪
+🔴⚪🔴🟡⚪⚪⚪
+🟡🔴🟡🔴🔴🟡🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 6. There is no direct tactic here, but my network rates the position after it at -0.51 for me, and your stone in column 2, row 1 is a problem for me the most. Looking 5 plies ahead, my score went from -733 to -439.",I played column 6. After looking 5 plies ahead its score is -439.,saliency,1,1.0
+28,61631426431132,14,red,2,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+🟡⚪⚪⚪⚪⚪⚪
+🔴⚪🔴⚪⚪🟡⚪
+🔴🟡🟡🔴⚪🔴⚪
+🟡🔴🟡🟡⚪🔴⚪
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣",I played column 2 because it blocks your four-in-a-row and it threatens to win in column 4 next move. I can force a win in 3 moves.,I played column 2. I can force a win in 3 moves.,block;threat,1,1.0
+29,345334475536465,15,yellow,4,"⚪⚪⚪⚪⚪⚪⚪
+⚪⚪⚪⚪⚪⚪⚪
+⚪⚪🔴🔴🔴⚪⚪
+⚪⚪🔴🔴🟡⚪⚪
+⚪⚪🟡🟡🔴🟡⚪
+⚪⚪🔴🟡🔴🟡🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 4 because it takes the centre column, which is part of the most lines of four. Looking 5 plies ahead, my score went from -930 to -983.",I played column 4. After looking 5 plies ahead its score is -983.,centre,1,1.0
+30,54114544512513452227541,23,yellow,6,"⚪⚪⚪🟡🔴⚪⚪
+🔴⚪⚪🔴🟡⚪⚪
+🔴🔴⚪🟡🟡⚪⚪
+🟡🟡⚪🔴🔴⚪⚪
+🟡🔴⚪🔴🟡⚪⚪
+🔴🔴🟡🟡🔴⚪🟡
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣","I played column 6. There is no direct tactic here, but my network rates the position after it at -0.94 for me, and your stone in column 4, row 3 is a problem for me the most. Looking 6 plies ahead, my score went from -945 to -925.",I played column 6. After looking 6 plies ahead its score is -925.,saliency,1,1.0
