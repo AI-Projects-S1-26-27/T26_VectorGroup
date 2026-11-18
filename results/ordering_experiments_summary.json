@@ -1,0 +1,38 @@
+{
+  "positions": 100,
+  "full_depth_positions": 82,
+  "requested_depth": [
+    8
+  ],
+  "total_nodes": {
+    "exact": 2526749,
+    "zobrist": 2526749,
+    "exact+killers": 2291782,
+    "zobrist+killers": 2291782
+  },
+  "total_time_s": {
+    "exact": 83.98,
+    "zobrist": 85.01,
+    "exact+killers": 90.11,
+    "zobrist+killers": 91.57
+  },
+  "nodes_vs_exact": {
+    "exact": 1.0,
+    "zobrist": 1.0,
+    "exact+killers": 0.907,
+    "zobrist+killers": 0.907
+  },
+  "reduction_zobrist_vs_exact": 1.0,
+  "reduction_killers_vs_exact": 1.1025,
+  "reduction_both_vs_exact": 1.1025,
+  "median_reduction_killers": 1.0971,
+  "positions_where_killers_fewer": 75,
+  "positions_where_killers_more": 7,
+  "score_mismatch_positions": [],
+  "zobrist_collisions": 0,
+  "zobrist_distinct_keys": 855191,
+  "exact_us_per_key": 0.073,
+  "zobrist_us_per_key": 1.277,
+  "seed": 26,
+  "workers": 3
+}
