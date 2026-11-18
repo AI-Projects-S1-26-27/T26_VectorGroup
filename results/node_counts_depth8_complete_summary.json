@@ -1,0 +1,59 @@
+{
+  "method": "single fixed depth; all root moves exact; root excluded from nodes",
+  "depths": {
+    "8": {
+      "positions": 100,
+      "all_complete_positions": 100,
+      "all_complete_nodes": {
+        "minimax": 217990090,
+        "alpha-beta": 4078411,
+        "alpha-beta+ordering+tt": 2119497
+      },
+      "complete": {
+        "minimax": 100,
+        "alpha-beta": 100,
+        "alpha-beta+ordering+tt": 100
+      },
+      "node_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "time_limited": {
+        "minimax": 0,
+        "alpha-beta": 0,
+        "alpha-beta+ordering+tt": 0
+      },
+      "root_score_mismatches": [],
+      "paired_comparisons": {
+        "minimax": {
+          "positions": 100,
+          "baseline_nodes": 217990090,
+          "optimized_nodes": 2119497,
+          "reduction": 102.84991674911548
+        },
+        "alpha-beta": {
+          "positions": 100,
+          "baseline_nodes": 4078411,
+          "optimized_nodes": 2119497,
+          "reduction": 1.9242353256456604
+        }
+      }
+    }
+  },
+  "proposal_depth8_target": {
+    "depth": 8,
+    "required_positions": 100,
+    "required_reduction": 10,
+    "status": "met",
+    "reference": "minimax vs optimized"
+  },
+  "fully_completed": true,
+  "scores_consistent": true,
+  "seed": 26,
+  "workers": 4,
+  "node_limit": null,
+  "time_limit_s": 3600.0,
+  "minimax_backend": "native_minimax",
+  "native_source_sha256": "cc47f735657bc082b7e4d58cf5d6c0ada4978e8e58e04df45ea35dcaf97898c3"
+}

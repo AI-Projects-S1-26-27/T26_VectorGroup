@@ -8,6 +8,113 @@ from c4.tt import TranspositionTable
 from eval.node_counts import compare_node_counts, main
 from eval.node_counts import fixed_positions
 from eval.node_counts import summarize_node_counts
+from eval.node_counts import fixed_depth_run, run_sweep, summarize_sweep
+from eval.node_counts import build_native_minimax, native_minimax_run
+
+
+@pytest.fixture(scope="module")
+def native_counter():
+    try:
+        return build_native_minimax()
+    except RuntimeError as error:
+        pytest.skip(str(error))
+
+
+@pytest.mark.parametrize("moves", ["", "4453", "12121", "3747", "444444"])
+def test_native_minimax_matches_python_exact_nodes_and_all_scores(native_counter, moves):
+    native = native_minimax_run(moves, 4, None, 30, native_counter)
+    python = fixed_depth_run(moves, 4, "minimax", node_limit=None, time_limit=30)
+    for field in ("status", "nodes", "chosen", "score", "root_scores", "completed_depth"):
+        assert native[field] == python[field], (moves, field)
+
+
+def test_native_minimax_limit_and_parallel_sweep(native_counter, tmp_path):
+    limited = native_minimax_run("", 8, 10, 30, native_counter)
+    assert limited["status"] == "node_limit" and limited["nodes"] == 10
+    assert limited["score"] is limited["chosen"] is None and limited["root_scores"] == ""
+    rows = run_sweep(("", "4453"), (2,), tmp_path / "native.csv", workers=2,
+                     node_limit=None, native_executable=native_counter)
+    assert summarize_sweep(rows)["fully_completed"]
+    assert summarize_sweep(rows)["scores_consistent"]
+    assert {r["backend"] for r in rows} == {"native_minimax", "python"}
+
+
+def test_minimax_counts_full_tree_without_alpha_beta_or_table():
+    # No wins before depth 2: 7 root children and 49 grandchildren, root excluded.
+    row = fixed_depth_run("", 2, "minimax")
+    assert row["status"] == "complete" and row["nodes"] == 7 + 49
+    assert row["tt_hits"] == 0
+
+
+@pytest.mark.parametrize("moves", ["", "4453", "12121", "3747"])
+def test_fixed_depth_algorithms_match_all_root_scores(moves):
+    import json
+    rows = [fixed_depth_run(moves, 4, c, node_limit=None, time_limit=30)
+            for c in ("minimax", "alpha-beta", "alpha-beta+ordering+tt")]
+    assert all(r["status"] == "complete" and r["completed_depth"] == 4 for r in rows)
+    assert len({r["root_scores"] for r in rows}) == 1
+    assert len({r["chosen"] for r in rows}) == 1
+    # Independent production iterative search, using its actual last depth.
+    trace = search(Board.from_moves(moves), HeuristicEvaluator(), max_depth=4, time_limit=30)
+    at_trace_depth = fixed_depth_run(moves, trace.depth, "minimax", node_limit=None)
+    assert {int(k): v for k, v in json.loads(at_trace_depth["root_scores"]).items()} == {
+        c: info.score for c, info in trace.moves.items()}
+
+
+@pytest.mark.parametrize("configuration", ["minimax", "alpha-beta", "alpha-beta+ordering+tt"])
+def test_limited_run_does_not_publish_partial_scores(configuration):
+    row = fixed_depth_run("", 4, configuration, node_limit=10)
+    assert row["status"] == "node_limit" and row["nodes"] == 10
+    assert row["completed_depth"] == 0
+    assert row["score"] is row["chosen"] is None
+    assert row["root_scores"] == ""
+
+
+def test_time_limited_run_is_not_a_completed_measurement():
+    row = fixed_depth_run("", 12, "minimax", node_limit=None, time_limit=1e-12)
+    assert row["status"] == "time_limit"
+    assert row["nodes"] == 0 and row["completed_depth"] == 0
+    assert row["score"] is None and row["root_scores"] == ""
+
+
+def test_sweep_checkpoints_resumes_and_groups_depths(tmp_path):
+    import csv
+    with pytest.raises(ValueError, match="empty sweep"):
+        summarize_sweep([])
+    target = tmp_path / "sweep.csv"
+    rows = run_sweep(("", "4453"), (1, 2), target, workers=2, node_limit=20)
+    assert len(rows) == 12
+    summary = summarize_sweep(rows)
+    assert summary["scores_consistent"]
+    assert summary["proposal_depth8_target"]["status"] == "not_fully_measured"
+    assert summary["depths"]["1"]["complete"]["minimax"] == 2
+    assert summary["depths"]["2"]["paired_comparisons"]["minimax"]["positions"] == 0
+    assert summary["depths"]["2"]["paired_comparisons"]["minimax"]["reduction"] is None
+    inconsistent = [dict(row) for row in rows]
+    inconsistent[0]["root_scores"] = "{}"
+    assert not summarize_sweep(inconsistent)["scores_consistent"]
+    assert summarize_sweep(inconsistent)["depths"]["1"]["all_complete_positions"] == 1
+    # Simulate interruption after one saved job and resume without duplication.
+    with target.open(encoding="utf-8", newline="") as stream:
+        saved = list(csv.DictReader(stream))
+    with target.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=saved[0])
+        writer.writeheader()
+        writer.writerow(saved[0])
+    resumed = run_sweep(("", "4453"), (1, 2), target, node_limit=20, resume=True)
+    assert len(resumed) == 12
+    assert summarize_sweep(resumed) == summary
+    with pytest.raises(ValueError, match="does not match"):
+        run_sweep(("", "4453"), (1, 2), target, node_limit=21, resume=True)
+
+
+def test_sweep_cli_writes_summary(tmp_path):
+    import json
+    main(["--depths", "1", "2", "--count", "2", "--workers", "2",
+          "--out", str(tmp_path / "sweep.csv"), "--summary", str(tmp_path / "sweep.json")])
+    summary = json.loads((tmp_path / "sweep.json").read_text())
+    assert set(summary["depths"]) == {"1", "2"}
+    assert summary["fully_completed"] and summary["scores_consistent"]
 
 
 def test_summary_excludes_short_runs_and_detects_score_mismatch():
