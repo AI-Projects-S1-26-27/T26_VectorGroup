@@ -285,9 +285,11 @@ not a proof of a universal speedup on every Connect-4 position.
 python -m eval.node_counts --depths 8 --count 100 --seed 26 --workers 4 --node-limit 0 --time-limit 3600 --native-minimax --out results/node_counts_depth8_complete.csv --summary results/node_counts_depth8_complete_summary.json --plot results/plots/node_counts_depth8_complete.png --progress
 ```
 
-Use `--resume` with the same arguments after an interruption. A C++ compiler
-is required only for this optional minimax backend; the production agent
-remains Python. The latest focused suite passes **44 tests**.
+Use `--resume` with the same arguments after an interruption. At the time of
+this node-count experiment, the compiler was used only for its minimax baseline
+and production search remained Python. An optional production accelerator was
+added afterward, separately documented below. This experiment's focused suite
+passed **44 tests**.
 
 Raw results, summary, and protocol notes are saved in
 `results/node_counts_depth8_complete.csv`,
@@ -297,6 +299,71 @@ preserved unchanged. Full 100-position comparisons at depths 6, 7, and 9-12
 remain limited; meeting the depth-8 target does not establish those results.
 
 ![Completed depth-8 node comparison](../../results/plots/node_counts_depth8_complete.png)
+
+## Opt-in native search-depth target (2026-11-18)
+
+The pure-Python trials did not reliably reach 10 plies per second and were
+rolled back. With the user's permission, an optional C++ production-search
+backend was added in `c4/native_search.cpp` and `c4/native_search.py`, with a
+small dispatch addition to Shridali's `search.py` and a native-storage bridge
+in Rujuta's `tt.py`. The original Python engine remains the default. Other
+evaluator/ordering/table implementations continue to use Python.
+
+On the exact positions consumed by `eval/measure_search.py`, five repetitions
+per position with fresh tables produced:
+
+| Position (move string) | Completed plies in native mode |
+|---|---:|
+| Empty | 12 |
+| Early (`332432`) | 14-15 |
+| Middle (`33243244152251`) | 14 |
+
+All **15 externally timed calls** finished within the requested one second;
+the maximum was **0.9722 seconds**. Thus the prepared native heuristic mode
+meets the 10-ply target on this measurement set. This is a documented native
+implementation deviation, **not** evidence that pure Python now meets it or a
+guarantee across arbitrary positions/hardware. One-time compilation/loading
+is setup, excluded from the per-move clock and recorded separately. Each call
+includes its own native table creation and Python trace marshalling; a 0.03 s
+reserve is subtracted from the internal budget, not added to the deadline.
+
+The C++ code preserves the same heuristic, terminal/horizon convention,
+alpha-beta/iterative-deepening algorithm, full-window scoring of every root
+move, table flags/replacement, win-distance normalization, and SearchTrace
+outputs. It does not reduce depths or drop root alternatives. Its evaluator
+matched Python on 4,198 legal positions. All 100 fixed sample positions were
+checked against the completed depth-8 artifact or, for the 18 early-decided
+positions, the corresponding Python traces. All checked root scores and PV
+legality agree. Native storage preserves the public table API and can be
+cleared or queried normally.
+
+The native/core focused suite passed 44 tests. The broader integration suite
+with automatic native dispatch enabled passed **132 tests, 2 skipped**.
+
+```powershell
+python -m c4.native_search --backend native --repeats 5 --time-limit 1 --measure results/search_depth_native.json --plot results/plots/search_depth_native.png
+```
+
+For the app, prepare the accelerator once and opt in:
+
+```powershell
+python -c "from c4.native_search import prepare_native_search; prepare_native_search()"
+$env:C4_SEARCH_BACKEND = 'auto'
+python -m uvicorn web.app:app --reload
+```
+
+The optional backend needs g++/clang++ at setup; the tested compiler was MSYS2
+g++ 15.2.0. Build products stay in a temporary cache. Automatic mode falls back
+to Python if unsupported/unavailable; explicit `backend='native'` fails clearly
+instead. `backend='python'` always retains the reference path.
+
+The evidence and full qualifications are in `results/search_depth_native.json`,
+`results/native_search_validation.json`, and `results/search_depth_native_notes.md`.
+Earlier match results describe the original Python engine and must not be
+presented as matches against this new accelerated mode. The other incomplete
+depth-sweep results are not filled in by this three-position timing experiment.
+
+![Native heuristic search depth](../../results/plots/search_depth_native.png)
 
 Code and test drafting, experiment preparation, and this report draft used
 OpenAI Codex assistance. See Rujuta's entry in `docs/AI_USAGE.md` for the
