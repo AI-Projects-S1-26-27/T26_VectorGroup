@@ -34,3 +34,5 @@ One line per piece of work: date, who, what. Everyone adds their own lines.
 - 2026-11-16 CH J Srikar (with Claude): web interface (web/app.py, web/static/): FastAPI + WebSocket server, board, explanation panel, stats toggles and question box, with 9 tests; merged as PR #7.
 - 2026-11-18 CH J Srikar (with Claude): set game.agent in web/app.py so what-if and who-is-winning use the game's engine (flagged by Aditya).
 - 2026-11-18 CH J Srikar: set up the demo on my laptop with the round 2 network; demo video recorded with Claude; AI-usage row.
+
+- 2026-11-18 Shridali Singh: Ran the online rating study for the agent's explanations (Google Form, 6 explanations rated 1 to 5 for correctness, clarity and usefulness). 18 responses; mean 4.23 of 5. Raw responses in results/user_study/responses.csv. No score-only baseline in this form.
