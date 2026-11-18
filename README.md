@@ -9,7 +9,6 @@ Instructor-in-charge: Jayati Deshmukh
 | Project | A Connect-4 Agent That Explains Its Own Moves ("Glass Box") |
 | Track | Demo |
 | Topic areas | Agents and Game Theory (adversarial search), Deep Learning (value network), with Knowledge Representation in a supporting role |
-| Repository | https://github.com/AI-Projects-S1-26-27/Connect_4_Agent |
 
 ## What it does
 
