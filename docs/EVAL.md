@@ -9,9 +9,10 @@ Run everything from the repo root with the virtual environment active. Results g
 | Search efficiency (>= 10x fewer nodes at depth 8) | `python -m eval.node_counts --depth 8 > results/node_counts.csv` (Rujuta's script; edit its positions to the 100 fixed ones) | nothing | results/node_counts.csv |
 | Network agrees with solver (>= 80% on 2,000 unseen positions) | `python -m eval.solver_agreement --positions 2000 --model models/nn_latest.pt --exclude-data data/selfplay/round_1 data/selfplay/round_2 --workers 3` | trained network, self-play data folders | results/solver_agreement/ |
 | Explanations are correct (>= 98% of claims) | Naman's `eval/claim_check.py` | explain layer | results/ |
-| Rating study (10 to 15 raters, 30 explanations) | `python -m eval.user_study.build_study`, share sheet_A / sheet_B (alternate raters), then `python -m eval.user_study.analyse_ratings ratings.csv` | explain layer | results/user_study/ |
+| Rating study (10 to 15 raters, 30 explanations) | `python -m eval.user_study.build_study --evaluator network --model models/nn_latest.pt`, then `python -m eval.user_study.make_form_script`, paste results/user_study/make_forms.gs into script.google.com and Run (it creates forms A and B and prints their links). Raters alternate A, B, A, B. Download each form's responses as CSV, then `python -m eval.user_study.convert_form A=responses_A.csv B=responses_B.csv` and `python -m eval.user_study.analyse_ratings results/user_study/ratings.csv` | explain layer | results/user_study/ |
 | Robustness (>= 95% sensible, < 2 s) | `python -m eval.robustness` | Aditya's c4/qa/answers.py | results/robustness/ |
-| All plots | `python -m eval.plots` | the files above | results/plots/*.png |
+| All plots (node_counts.png is Rujuta's and is left alone) | `python -m eval.plots` | the files above | results/plots/*.png |
+| Evaluation section of the report | `python -m eval.report_tables` | the files above | docs/report/mani.md |
 
 Notes
 * Use `--workers` at most (CPU cores - 1). Time-limited search gets weaker on a busy machine.
