@@ -334,6 +334,7 @@ async def handle(s: Session, msg: dict, ws: WebSocket) -> None:
         question = str(msg.get("question", "")).strip()[:300]
         if not question:
             return
+        s.game.agent = s.agent        # so "what if" / "who is winning" search with the same engine
         text = await asyncio.to_thread(answer_question, question, s.game)
         await ws.send_json({"type": "answer", "question": question, "text": text})
 
