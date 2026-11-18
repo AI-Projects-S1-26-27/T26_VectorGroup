@@ -11,4 +11,4 @@ Every member fills in their own row. Commits are under each member's own name.
 | Aditya Kumar Somani | Sentence templates, question matching, answers | c4/explain/templates.py, c4/qa/ |
 | Veer Parekh | Self-play pipeline and dataset | c4/selfplay/ |
 | Sriyanth Varma M | Network, training, saliency | c4/nn/ |
-| CH J Srikar | Web interface | web/ |
+| CH J Srikar | Web interface: server, board, explanation panel, stats toggles, question box; demo | web/app.py, web/static/, tests/test_web.py |
