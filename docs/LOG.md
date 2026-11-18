@@ -25,3 +25,6 @@ One line per piece of work: date, who, what. Everyone adds their own lines.
 - 2026-11-15 Shridali Singh (with Claude): negamax with alpha-beta, iterative deepening and the table/ordering hooks (c4/search.py) and the agent (c4/agent.py), with tests.
 - 2026-11-16 Shridali Singh: merged Srikar's PR #7 and updated main.
 - 2026-11-18 Shridali Singh (with Claude): updated requirements.txt (added httpx; 174 tests passed); measured search depth (eval/measure_search.py); ran the 200-game network vs heuristic match (94-10-96, score 0.495, target not met); found and fixed a time-check bug (clock checked every 1024 nodes, network overran 1 s), and saved both match runs in results/match/.
+- 2026-11-16 CH J Srikar (with Claude): web interface (web/app.py, web/static/): FastAPI + WebSocket server, board, explanation panel, stats toggles and question box, with 9 tests; merged as PR #7.
+- 2026-11-18 CH J Srikar (with Claude): set game.agent in web/app.py so what-if and who-is-winning use the game's engine (flagged by Aditya).
+- 2026-11-18 CH J Srikar: set up the demo on my laptop with the round 2 network; demo video recorded with Claude; AI-usage row.
