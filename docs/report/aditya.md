@@ -99,7 +99,7 @@ six moves, with the agent's last move in column 4:
 with 164 sub-cases: every question form and column spelling above, the rejected
 forms, all four answers on hand-built traces (including proven wins and losses
 counted in moves), the unusual situations, and that a what-if search leaves the
-game unchanged. On main (`d889af7`) the full suite passes: 174 tests.
+game unchanged. On main (`c89f28c`) the full suite passes: 174 tests.
 
 ## Robustness check (proposal 4.5)
 
@@ -111,7 +111,7 @@ junk input, several questions at once) in four game situations (mid-game, start,
 full column, game over), and checks that each reply is a short plain answer of the
 expected kind.
 
-Final check on main `d889af7`, agent at 1 s per move. The full results (every
+Final check on main `c89f28c`, agent at 1 s per move. The full results (every
 question, reply, category and time) are saved in `results/robustness/heuristic/`
 and `results/robustness/network/`, as `robustness.csv` and `robustness.json`.
 
